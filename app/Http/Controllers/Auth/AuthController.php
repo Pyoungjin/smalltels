@@ -65,22 +65,4 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * [postRegister description]
-     * @param  Request $request [description]
-     * @return [type]           [description]
-     */
-    public function postRegister(Request $request)
-    {
-        $validator = $this->validator($request->all());
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-
-        Auth::login($this->create($request->all()));
-
-        return redirect($this->redirectPath());
-    }
 }
