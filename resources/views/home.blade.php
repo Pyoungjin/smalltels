@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>home</title>
-</head>
-<body>
-구현구현구현구
-</body>
-</html>
+@extends('layouts.master')
+
+@section('title', 'Page Title')
+	'home'
+@stop
+
+@section('content')
+	@if(Auth::check())
+		<a href="auth/logout">로그아웃</a>
+	@endif
+@stop
