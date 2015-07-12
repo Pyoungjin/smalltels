@@ -41,6 +41,8 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
+        // var_dump($data);
+        // exit();
         return Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
@@ -61,5 +63,24 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    /**
+     * [postRegister description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function postRegister(Request $request)
+    {
+        $validator = $this->validator($request->all());
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        Auth::login($this->create($request->all()));
+
+        return redirect($this->redirectPath());
     }
 }

@@ -24,3 +24,11 @@ Route::get('/test/testFunc1', 'TestController@testFunc1');
 // Route::get('/test/testFunc1', function () {
 // 	return view('testview');
 // });
+// 
+
+Route::controller('/auth', 'Auth\AuthController');
+// Route::get('/auth/login', 'Auth\AuthController@getLogin');
+// 
+Route::get('/home', function () {
+	return view('home');
+});
