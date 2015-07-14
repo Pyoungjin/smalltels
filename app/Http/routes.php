@@ -20,7 +20,7 @@ Route::get('/phpinfo', function () {
 });
 
 // Route::get('/test/{FuncName}', 'TestController@'.$FuncName);
-Route::get('/test/testFunc1', 'TestController@testFunc1');
+// Route::get('/test/testFunc1', 'TestController@testFunc1');
 // Route::get('/test/testFunc1', function () {
 // 	return view('testview');
 // });
@@ -32,3 +32,5 @@ Route::controller('/auth', 'Auth\AuthController');
 Route::get('/home', function () {
 	return view('home');
 });
+Route::controller('/goRegister', 'Home\GoRegisterController');
+// Route::get('/goRegister', 'Home\GoRegisterController@getIndex');
