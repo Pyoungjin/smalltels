@@ -12,6 +12,9 @@
 */
 
 Route::get('/', function () {
+	if(Auth::check()){
+		return redirect('/home');
+	}
     return view('welcome');
 });
 
@@ -29,8 +32,28 @@ Route::get('/phpinfo', function () {
 Route::controller('/auth', 'Auth\AuthController');
 // Route::get('/auth/login', 'Auth\AuthController@getLogin');
 // 
+
+
+//고시원 등록
+Route::controller('/home/telRegister', 'Home\TelRegisterController');
+
+//총무신청
+Route::controller('/home/application', 'Home\ApplicationController');
+// Route::get('/home/application', function (){
+// 	return view('home.application');
+// });
+
+//smalltels사용
+Route::get('/home/manual', function () {
+	return view('home.manual');
+});
+
 Route::get('/home', function () {
+	if(!Auth::check()){
+		return redirect('/');
+	}
 	return view('home');
 });
-Route::controller('/goRegister', 'Home\GoRegisterController');
-// Route::get('/goRegister', 'Home\GoRegisterController@getIndex');
+
+
+
