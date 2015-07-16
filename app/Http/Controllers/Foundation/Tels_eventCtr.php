@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 /**
  * tels_event는 해당 고시원에서만 표시가 됨.
  */
-trait Tels_eventTrait
+class Tels_eventCtr
 {
     public function insertTels_event($tels_list_id , $user_id , $event_contents)
     {

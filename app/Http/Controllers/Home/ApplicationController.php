@@ -7,13 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 
-use App\Http\Controllers\Foundation\Tels_eventTrait;
+use App\Http\Controllers\Foundation\Tels_eventCtr;
 
 
 
 class ApplicationController extends Controller{
-
-	use Tels_eventTrait;
 	/**
 	 * [__construct description]
 	 */
@@ -34,7 +32,7 @@ class ApplicationController extends Controller{
 	 * @param  Request $request [description]
 	 * @return [type]           [description]
 	 */
-	public function postIndex (Request $request)
+	public function postIndex (Request $request,Tels_eventCtr $event)
 	{
 		
 		if($user = Auth::user())
@@ -59,8 +57,8 @@ class ApplicationController extends Controller{
  			$event_info['member'] = array( 0 => $user_id);
  			$event_info['contents'] = null;
 
-	        if($tel_id && $this->insertTels_event($tel_id, $user_id , $this->setEvent_contents($event_info))){
-	        	return redirect('/home')->with('message','총무신청이 완료되었습니다.');
+	        if($tel_id && $event->insertTels_event($tel_id, $user_id , $event->setEvent_contents($event_info))){
+	        	return redirect('/home')->with('message','총무신청이 완료되었습니다요.');
 	    	}
     	}
 

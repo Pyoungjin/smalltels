@@ -6,7 +6,7 @@ use App\Model\Tels_list;
 use Illuminate\Http\Request;
 
 
-trait Tels_listTrait
+class Tels_listCtr
 {
     public function insertTels(array $data)
     {

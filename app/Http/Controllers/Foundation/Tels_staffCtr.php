@@ -6,7 +6,7 @@ use App\Model\Tels_staff;
 use Illuminate\Http\Request;
 
 
-trait Tels_staffTrait
+class Tels_staffCtr
 {
     public function insertTels_staff($tels_id, $user_id, $roll)
     {
