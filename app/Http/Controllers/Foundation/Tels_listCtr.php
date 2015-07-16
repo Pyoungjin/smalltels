@@ -2,15 +2,19 @@
 
 namespace App\Http\controllers\Foundation;
 
-use App\Model\Tels_list;
+use App\Model\Tels_list as M_TelsList;
 use Illuminate\Http\Request;
+
+use TelStaffs;
 
 
 class Tels_listCtr
 {
+
+    private $list = array();    
     public function insertTels(array $data)
     {
-        return Tels_list::create([
+        return M_TelsList::create([
             'name' => $data['name'],
             'address' => $data['address'],
             'phone' => $data['phone']
@@ -25,13 +29,29 @@ class Tels_listCtr
      */
     public function updateTelsAddress($tels_list_id, $address)
     {
-        $tmp_tels = Tels_list::find($tels_list_id);
+        $tmp_tels = M_TelsList::find($tels_list_id);
         $tmp_tels->address = $address;
         return $tmp_tels->save();
     }
 
-    public function getTelsListWithUserId($user_id)
+    public function setTelsListWithUserId($user_id)
     {
-        return Tels_list::where('user_id','=',$user_id)->get();
+        $tmp_list = M_TelsList::find($user_id)->telsList->toArray();
+        foreach ($tmp_list as $val) {
+            $tmp_tel_info = null;
+            $tmp_tel_info = M_TelsList::find($val['tels_id'])->toArray();
+            array_push($this->list,$tmp_tel_info);
+        }
     }
+
+    public function telsList($user_id = null)
+    {
+
+        if(!is_null($user_id)){
+            $this->setTelsListWithUserId($user_id);
+        }
+
+        return $this->list;
+    }
+        
 }

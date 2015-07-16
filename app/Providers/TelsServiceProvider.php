@@ -27,13 +27,13 @@ class TelsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('Tels_listCtr',function () {
+        $this->app->singleton('Tels_listCtr',function () {
             return new Tels_listCtr;
         });
-        $this->app->bind('Tels_staffCtr',function () {
+        $this->app->singleton('Tels_staffCtr',function () {
             return new Tels_staffCtr;
         });
-        $this->app->bind('Tels_eventCtr',function () {
+        $this->app->singleton('Tels_eventCtr',function () {
             return new Tels_eventCtr;
         });
     }

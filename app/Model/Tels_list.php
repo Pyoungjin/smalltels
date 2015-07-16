@@ -29,4 +29,9 @@ class Tels_list extends Model
      * @var array
      */
     // protected $hidden = ['password', 'remember_token'];
+    
+    public function telsList() {
+        return $this->hasMany('App\Model\Tels_staff','user_id','id');
+    } 
+    
 }

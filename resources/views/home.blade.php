@@ -1,7 +1,17 @@
 @extends('layouts.home')
 
 @section('title', 'Page Title')
-	'home'
+
+
+@section('head')
+	@parent
+
+	@if(($list = TelsList::telsList()) != null)
+		@foreach ( $list as $val)
+		{{-- {{var_dump($val)}} --}}
+			<a href='/office/{{$val["id"]}}'>{{$val["name"]}}</a>
+		@endforeach
+	@endif
 @stop
 
 @section('content')
@@ -18,7 +28,7 @@
 	{{-- 개인정보관리 --}}
 	<a href="home/admin">개인정보 관리</a>
 	{{-- 각 고시원별 이동 탭 --}}
-	<a href="">@각고시원별 이동</a>
+	{{-- <a href="">@각고시원별 이동</a> --}}
 	@if($tmp_message = Session::get('message'))
 		<br>{{$tmp_message}}
 	@endif

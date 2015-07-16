@@ -15,17 +15,18 @@ use Illuminate\Http\RedirectResponse;
 
 
 class HomeController extends Controller{
+
+	public $tels_list = array();
 	/**
 	 * [__construct description]
 	 */
     public function __construct()
     {
     	$this->middleware('auth');
-        // if(Auth::guest()){
-        // 	// return redirect('/');
-        // 	return redirect('/');
-        // 	// return redirect('/welcome')->with('message','로그인을 해주세요dd');
-        // }
+    	$user = Auth::user();
+    	$this->tels_list = TelsList::telsList($user->getAuthIdentifier());
+    	// var_dump($user->getAuthIdentifier());
+    	// exit();
     }
 
     public function getIndex()
@@ -109,7 +110,7 @@ class HomeController extends Controller{
 	        //사용자를 고시원 오너로 저장한다.
 	        $staff = TelStaffs::insertTels_staff($tel->getQueueableId(), $user->getAuthIdentifier() , 'owner');
 	        //리다이렉트 시킨다.
-	        return redirect('/home')->with('message',$tel->__get('name').' 이(가) 등록되었습니다.');
+	        return redirect('/home')->with('message',$tel->name.' 이(가) 등록되었습니다.');
     	}
 
     	return redirect('/')->with('message','로그인이 필요합니다.');
