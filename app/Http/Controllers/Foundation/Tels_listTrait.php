@@ -29,4 +29,9 @@ trait Tels_listTrait
         $tmp_tels->address = $address;
         return $tmp_tels->save();
     }
+
+    public function getTelsListWithUserId($user_id)
+    {
+        return Tels_list::where('user_id','=',$user_id)->get();
+    }
 }
