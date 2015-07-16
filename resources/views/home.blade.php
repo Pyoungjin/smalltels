@@ -10,7 +10,7 @@
 		<a href="auth/logout">로그아웃</a>
 	@endif
 	{{-- 고시원 등록 --}}
-	<a href="home/telRegister">새 고시원 등록</a>
+	<a href="home/tel-register">새 고시원 등록</a>
 	{{-- 총무 신청 --}}
 	<a href="home/application">총무 신청</a>
 	{{-- 사용설명서 --}}

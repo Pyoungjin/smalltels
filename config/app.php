@@ -143,6 +143,7 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelsServiceProvider::class,
 
     ],
 
@@ -191,6 +192,10 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+
+        'TelsEvent' => App\Facades\Tels_eventFacade::class,
+        'TelsList' => App\Facades\Tels_listFacade::class,
+        'TelStaffs' => App\Facades\Tels_staffFacade::class,
 
     ],
 

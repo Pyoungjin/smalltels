@@ -3,17 +3,17 @@ namespace App\Http\controllers\Home;
 
 use Auth;
 use Validator;
+use TelsList;
+use TelStaffs;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 
-use App\Http\Controllers\Foundation\Tels_listTrait;
-use App\Http\Controllers\Foundation\Tels_staffTrait;
 
 
 class TelRegisterController extends Controller{
 
-	use Tels_listTrait,Tels_staffTrait;
+	// use Tels_listTrait,Tels_staffTrait;
 	/**
 	 * [__construct description]
 	 */
@@ -49,11 +49,11 @@ class TelRegisterController extends Controller{
 	        }
  
 	        //고시원을 저장한다.
-	        $tels = $this->insertTels($request->all());
+	        $tel = TelsList::insertTels($request->all());
 	        //사용자를 고시원 오너로 저장한다.
-	        $staff = $this->insertTels_staff($tels->getQueueableId(), $user->getAuthIdentifier() , 'owner');
+	        $staff = TelStaffs::insertTels_staff($tel->getQueueableId(), $user->getAuthIdentifier() , 'owner');
 	        //리다이렉트 시킨다.
-	        return redirect('/home')->with('message',$tels->__get('name').' 이(가) 등록되었습니다.');
+	        return redirect('/home')->with('message',$tel->__get('name').' 이(가) 등록되었습니다.');
     	}
 
     	return redirect('/')->with('message','로그인이 필요합니다.');

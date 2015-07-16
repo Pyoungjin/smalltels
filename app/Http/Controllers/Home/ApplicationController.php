@@ -3,11 +3,12 @@ namespace App\Http\controllers\Home;
 
 use Auth;
 use Validator;
+use TelsEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 
-use App\Http\Controllers\Foundation\Tels_eventCtr;
+// use App\Http\Controllers\Foundation\Tels_eventCtr;
 
 
 
@@ -17,9 +18,12 @@ class ApplicationController extends Controller{
 	 */
     public function __construct()
     {
-        if(Auth::check()){
-        	return redirect('/')->with('message','로그인을 해주세요');
-        }
+    	var_dump(Auth::guest());
+    	exit();
+    	$this->middleware('guest', ['except' => 'getLogout']);
+        // if(Auth::check()){
+        // 	return redirect('/')->with('message','로그인을 해주세요');
+        // }
     }
 
 	public function getIndex () 
@@ -32,7 +36,7 @@ class ApplicationController extends Controller{
 	 * @param  Request $request [description]
 	 * @return [type]           [description]
 	 */
-	public function postIndex (Request $request,Tels_eventCtr $event)
+	public function postIndex (Request $request)
 	{
 		
 		if($user = Auth::user())
@@ -57,8 +61,8 @@ class ApplicationController extends Controller{
  			$event_info['member'] = array( 0 => $user_id);
  			$event_info['contents'] = null;
 
-	        if($tel_id && $event->insertTels_event($tel_id, $user_id , $event->setEvent_contents($event_info))){
-	        	return redirect('/home')->with('message','총무신청이 완료되었습니다요.');
+	        if($tel_id && TelsEvent::insertTels_event($tel_id, $user_id , TelsEvent::setEvent_contents($event_info))){
+	        	return redirect('/home')->with('message','총무신청이 완료되었습니다요.zz');
 	    	}
     	}
 

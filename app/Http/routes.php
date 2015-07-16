@@ -33,26 +33,31 @@ Route::controller('/auth', 'Auth\AuthController');
 // Route::get('/auth/login', 'Auth\AuthController@getLogin');
 // 
 
-Route::get('/home', function () {
-	if(!Auth::check()){
-		return redirect('/');
-	}
-	return view('home');
-});
 
-//고시원 등록
+
+// 고시원 등록
 // Route::controller('/home/telRegister', 'Home\TelRegisterController');
 
 //총무신청
-Route::controller('/home/application', 'Home\ApplicationController');
+// Route::controller('/home/application', 'Home\ApplicationController');
 // Route::get('/home/application', function (){
 // 	return view('home.application');
 // });
 
 //smalltels사용
-Route::get('/home/manual', function () {
-	return view('home.manual');
-});
+// Route::get('/home/manual', function () {
+// 	return view('home.manual');
+// });
+
+// Route::get('/home', function () {
+// 	if(!Auth::check()){
+// 		return redirect('/');
+// 	}
+// 	return view('home');
+// });
+
+// Route::controller('home',['middleware'=>'guest','HomeController']);
+Route::controller('/home','HomeController');
 
 
 
