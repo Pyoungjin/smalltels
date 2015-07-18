@@ -5,8 +5,9 @@ use Auth;
 use Validator;
 // use TelsEvent;
 use TelsList;
-use TelStaffs;
+// use TelStaffs;
 use Request;
+use Office;
 // use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 // use Illuminate\Http\RedirectResponse;
@@ -23,19 +24,11 @@ class OfficeController extends Controller{
     {
     	$this->middleware('auth');
 
-    	// $user = Auth::user();
-    	// 
-    	// var_dump(Request::route('tel_id'));
-    	// exit();
-    	// $user = Auth::user();
     	TelsList::telsList(
     		Auth::user()->getAuthIdentifier()
     		);
 
-    	TelStaffs::chkTelsOfUser(
-    		Auth::user()->getAuthIdentifier(),
-    		Request::route('tel_id')
-    		);
+    	Office::chkPermission();
 
     }
 

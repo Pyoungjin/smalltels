@@ -30,12 +30,17 @@ class Tels_staffCtr
         return $tmp_staff->save();
     }
 
-    public function chkTelsOfUser($user_id,$tel_id)
+    // public function chkTelsOfUser($user_id,$tel_id)
+    // {
+    //     if(!count(M_TelsStaff::where('user_id','=',$user_id)->where('tels_id','=',$tel_id)->get()->toArray()))
+    //     {
+    //         echo '접속 오류 : '.'당신이 소속된 고시원이 아닙니다.';
+    //         exit();
+    //     }
+    // }
+
+    public function staffList($tel_id)
     {
-        if(!count(M_TelsStaff::where('user_id','=',$user_id)->where('tels_id','=',$tel_id)->get()->toArray()))
-        {
-            echo '접속 오류 : '.'당신이 소속된 고시원이 아닙니다.';
-            exit();
-        }
+        return M_TelsStaff::where('tels_id','=',$tel_id)->get()->toArray();
     }
 }

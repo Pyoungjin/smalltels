@@ -194,8 +194,9 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
         'TelsEvent' => App\Facades\Tels_eventFacade::class,
-        'TelsList' => App\Facades\Tels_listFacade::class,
+        'TelsList'  => App\Facades\Tels_listFacade::class,
         'TelStaffs' => App\Facades\Tels_staffFacade::class,
+        'Office'    => App\Facades\OfficeHandlerFacade::class,
 
     ],
 

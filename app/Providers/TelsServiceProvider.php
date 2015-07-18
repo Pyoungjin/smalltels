@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Http\Controllers\Foundation\Tels_listCtr;
 use App\Http\Controllers\Foundation\Tels_staffCtr;
 use App\Http\Controllers\Foundation\Tels_eventCtr;
+use App\Http\Controllers\Foundation\OfficeHandler;
 
 
 class TelsServiceProvider extends ServiceProvider
@@ -35,6 +36,9 @@ class TelsServiceProvider extends ServiceProvider
         });
         $this->app->singleton('Tels_eventCtr',function () {
             return new Tels_eventCtr;
+        });
+        $this->app->singleton('OfficeHandler',function () {
+            return new OfficeHandler;
         });
     }
 }
