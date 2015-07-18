@@ -9,6 +9,9 @@
         <div style='border-bottom: 3px solid black; margin: 5px; '>
             @section('head')
                 <a href="/home">HOME</a>
+                @if(Auth::check())
+                    <a href="auth/logout">로그아웃</a>
+                @endif
             @show
         </div>
         <div class="container">

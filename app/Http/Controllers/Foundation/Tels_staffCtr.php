@@ -2,7 +2,7 @@
 
 namespace App\Http\controllers\Foundation;
 
-use App\Model\Tels_staff;
+use App\Model\Tels_staff as M_TelsStaff;
 use Illuminate\Http\Request;
 
 
@@ -10,7 +10,7 @@ class Tels_staffCtr
 {
     public function insertTels_staff($tels_id, $user_id, $roll)
     {
-        return Tels_staff::create([
+        return M_TelsStaff::create([
             'tels_id' => $tels_id,
             'user_id' => $user_id,
             'roll' => $roll
@@ -25,8 +25,17 @@ class Tels_staffCtr
      */
     public function updateTelsRoll($tels_staff_id, $roll)
     {
-        $tmp_staff = Tels_staff::find($tels_staff_id);
+        $tmp_staff = M_TelsStaff::find($tels_staff_id);
         $tmp_staff->roll = $roll;
         return $tmp_staff->save();
+    }
+
+    public function chkTelsOfUser($user_id,$tel_id)
+    {
+        if(!count(M_TelsStaff::where('user_id','=',$user_id)->where('tels_id','=',$tel_id)->get()->toArray()))
+        {
+            echo '접속 오류 : '.'당신이 소속된 고시원이 아닙니다.';
+            exit();
+        }
     }
 }

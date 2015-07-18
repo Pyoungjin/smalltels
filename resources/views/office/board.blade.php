@@ -1,12 +1,11 @@
-@extends('layouts.home')
+@extends('layouts.office')
 
-@section('title', '고시원 등록')
+@section('title', 'Page Title')
 
-@stop
 
 @section('head')
 	@parent
-
+		{{-- {{123}} --}}
 	@if(($list = TelsList::telsList()) != null)
 		@foreach ( $list as $val)
 		{{-- {{var_dump($val)}} --}}
@@ -16,5 +15,5 @@
 @stop
 
 @section('content')
-    사용법입니다.
+	<div>내용내용</div>
 @stop

@@ -46,7 +46,6 @@ class Tels_listCtr
 
     public function telsList($user_id = null)
     {
-
         if(!is_null($user_id)){
             $this->setTelsListWithUserId($user_id);
         }
