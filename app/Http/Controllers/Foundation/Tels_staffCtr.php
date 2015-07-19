@@ -39,8 +39,13 @@ class Tels_staffCtr
     //     }
     // }
 
-    public function staffList($tel_id)
-    {
-        return M_TelsStaff::where('tels_id','=',$tel_id)->get()->toArray();
-    }
+    // public function staffList($tel_id)
+    // {
+    //     return M_TelsStaff::where('tels_id','=',$tel_id)->get()->toArray();
+    // }
+
+    // public function telsList($user_id)
+    // {
+    //     return M_TelsStaff::where('user_id','=',$user_id)->get()->toArray();
+    // }
 }

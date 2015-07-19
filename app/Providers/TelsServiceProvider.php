@@ -7,6 +7,7 @@ use App\Http\Controllers\Foundation\Tels_listCtr;
 use App\Http\Controllers\Foundation\Tels_staffCtr;
 use App\Http\Controllers\Foundation\Tels_eventCtr;
 use App\Http\Controllers\Foundation\OfficeHandler;
+use App\Http\Controllers\Foundation\UserHandler;
 
 
 class TelsServiceProvider extends ServiceProvider
@@ -39,6 +40,9 @@ class TelsServiceProvider extends ServiceProvider
         });
         $this->app->singleton('OfficeHandler',function () {
             return new OfficeHandler;
+        });
+        $this->app->singleton('UserHandler',function () {
+            return new UserHandler;
         });
     }
 }

@@ -3,6 +3,9 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Validator;
+use User;
+// use Office;
+
 use TelsEvent;
 use TelsList;
 use TelStaffs;
@@ -23,8 +26,9 @@ class HomeController extends Controller{
     public function __construct()
     {
     	$this->middleware('auth');
-    	$user = Auth::user();
-    	$this->tels_list = TelsList::telsList($user->getAuthIdentifier());
+    	// $user = Auth::user();
+    	User::start();
+    	// Office::start();
     	// var_dump($user->getAuthIdentifier());
     	// exit();
     }

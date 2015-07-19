@@ -34,13 +34,24 @@ class Tels_listCtr
         return $tmp_tels->save();
     }
 
+    /**
+     * primary_key 값을 기준으로 해당 정보를 찾아 배열로 리턴해줍니다.
+     * @param  [type] $tel_id [description]
+     * @return [type]         [description]
+     */
+    public function findToArray($tel_id)
+    {
+        return M_TelsList::find($tels_id)->toArray();
+    }
+
     public function setTelsListWithUserId($user_id)
     {
         $tmp_list = M_TelsList::find($user_id)->telsList->toArray();
         foreach ($tmp_list as $val) {
-            $tmp_tel_info = null;
-            $tmp_tel_info = M_TelsList::find($val['tels_id'])->toArray();
-            array_push($this->list,$tmp_tel_info);
+            // $tmp_tel_info = null;
+            // $tmp_tel_info = M_TelsList::find($val['tels_id'])->toArray();
+            // array_push($this->list,$tmp_tel_info);
+            array_push($this->list,M_TelsList::find($val['tels_id'])->toArray());
         }
     }
 

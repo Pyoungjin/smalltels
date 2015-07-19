@@ -197,6 +197,7 @@ return [
         'TelsList'  => App\Facades\Tels_listFacade::class,
         'TelStaffs' => App\Facades\Tels_staffFacade::class,
         'Office'    => App\Facades\OfficeHandlerFacade::class,
+        'User'      => App\Facades\UserHandlerFacade::class,
 
     ],
 
