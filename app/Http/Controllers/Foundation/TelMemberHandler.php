@@ -2,16 +2,16 @@
 
 namespace App\Http\controllers\Foundation;
 
-use App\Model\Tels_staff as M_TelsStaff;
+use App\Model\M_TelMember;
 use Illuminate\Http\Request;
 
 
-class Tels_staffCtr
+class TelMemberHandler
 {
-    public function insertTels_staff($tels_id, $user_id, $roll)
+    public function insertTelMember($tel_id, $user_id, $roll)
     {
-        return M_TelsStaff::create([
-            'tels_id' => $tels_id,
+        return M_TelMember::create([
+            'tel_id' => $tel_id,
             'user_id' => $user_id,
             'roll' => $roll
         ]);
@@ -23,9 +23,9 @@ class Tels_staffCtr
      * @param  string $address      [description]
      * @return [type]               [description]
      */
-    public function updateTelsRoll($tels_staff_id, $roll)
+    public function updateTelsRoll($tel_member_id, $roll)
     {
-        $tmp_staff = M_TelsStaff::find($tels_staff_id);
+        $tmp_staff = M_TelMember::find($tel_member_id);
         $tmp_staff->roll = $roll;
         return $tmp_staff->save();
     }

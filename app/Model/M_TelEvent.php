@@ -4,7 +4,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Tels_event extends Model
+class M_TelEvent extends Model
 {
     // use Authenticatable, CanResetPassword;
     use SoftDeletes;
@@ -14,13 +14,13 @@ class Tels_event extends Model
      *
      * @var string
      */
-    protected $table = 'tels_event';
+    protected $table = 'tel_event';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['tels_id', 'user_id', 'event_contents'];
+    protected $fillable = ['tel_id', 'user_id', 'event_contents'];
 
 }

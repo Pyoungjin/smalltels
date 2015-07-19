@@ -10,7 +10,7 @@
             @section('head')
                 <a href="/home">HOME</a>
                 @if(User::check())
-                    <a href="auth/logout">로그아웃</a>
+                    <a href="/auth/logout">로그아웃</a>
                     @if(count($list = User::info('office_list')))
                         @foreach ( $list as $val)
                             @if($val['id'] == Office::info('id'))

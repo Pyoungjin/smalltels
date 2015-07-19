@@ -4,7 +4,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Tels_staff extends Model
+class M_TelsList extends Model
 {
     // use Authenticatable, CanResetPassword;
     use SoftDeletes;
@@ -14,14 +14,14 @@ class Tels_staff extends Model
      *
      * @var string
      */
-    protected $table = 'tels_staff';
+    protected $table = 'tels_list';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['tels_id', 'user_id', 'roll'];
+    protected $fillable = ['name', 'address', 'phone'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -29,4 +29,9 @@ class Tels_staff extends Model
      * @var array
      */
     // protected $hidden = ['password', 'remember_token'];
+    
+    public function telsList() {
+        return $this->hasMany('App\Model\Tels_staff','user_id','id');
+    } 
+    
 }

@@ -2,18 +2,18 @@
 
 namespace App\Http\controllers\Foundation;
 
-use App\Model\Tels_event;
+use App\Model\M_TelEvent;
 use Illuminate\Http\Request;
 
 /**
  * tels_event는 해당 고시원에서만 표시가 됨.
  */
-class Tels_eventCtr
+class TelEventHandler
 {
-    public function insertTels_event($tels_list_id , $user_id , $event_contents)
+    public function insertTelEvent($tel_id , $user_id , $event_contents)
     {
-        return Tels_event::create([
-            'tels_id' => $tels_list_id,
+        return M_TelEvent::create([
+            'tel_id' => $tel_id,
             'user_id' => $user_id,
             'event_contents' => $event_contents
         ]);
@@ -25,9 +25,9 @@ class Tels_eventCtr
      * @param  string $address      [description]
      * @return [type]               [description]
      */
-    public function updateTelsAddress($tels_list_id, $address)
+    public function updateTelsAddress($tel_id, $address)
     {
-        $tmp_tels = Tels_event::find($tels_list_id);
+        $tmp_tels = M_TelEvent::find($tel_id);
         $tmp_tels->address = $address;
         return $tmp_tels->save();
     }

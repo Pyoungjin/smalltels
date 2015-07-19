@@ -8,8 +8,8 @@ use Request;
 // use TelsList;
 // use TelStaffs;
 
-use App\Model\Tels_list as M_TelsList;
-use App\Model\Tels_staff as M_TelsStaff;
+use App\Model\M_TelsList;
+use App\Model\M_TelMember;
 // use Illuminate\Http\Request;
 
 
@@ -118,7 +118,7 @@ class OfficeHandler
     private function setMember()
     {
         // foreach (TelStaffs::staffList($this->requsted_tel_id) as $val) {
-        foreach (M_TelsStaff::where('tels_id','=',$this->requsted_tel_id)->get()->toArray() as $val) {
+        foreach (M_TelMember::where('tel_id','=',$this->requsted_tel_id)->get()->toArray() as $val) {
             $this->tel_info['member'][$val['user_id']] = $val;
         }
     }

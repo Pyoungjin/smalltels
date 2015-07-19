@@ -8,9 +8,9 @@
     <body>
         <div style='border-bottom: 3px solid black; margin: 5px; '>
             @section('head')
-                <a href="/home">HOME</a>
+                <a href="/home" style="background-color: blue; color: white;">HOME</a>
                 @if(User::check())
-                    <a href="auth/logout">로그아웃</a>
+                    <a href="/auth/logout">로그아웃</a>
                     @if(count($list = User::info('office_list')))
                         @foreach ( $list as $val)
                         {{-- {{var_dump($val)}} --}}

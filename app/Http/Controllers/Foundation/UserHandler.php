@@ -5,11 +5,11 @@ namespace App\Http\controllers\Foundation;
 use Auth;
 use Request;
 // use TelsEvent;
-use TelsList;
-use TelStaffs;
+// use TelsList;
+// use TelStaffs;
 
-use App\Model\Tels_list as M_TelsList;
-use App\Model\Tels_staff as M_TelsStaff;
+use App\Model\M_TelsList;
+use App\Model\M_TelMember;
 // use Illuminate\Http\Request;
 
 
@@ -20,7 +20,7 @@ class UserHandler
     private $permission = null;
 
     private $user_info = array(
-            'user_id'   => null
+            'id'   => null
             , 'office_list_index' => array()
             , 'office_list' => array()
         );
@@ -100,7 +100,7 @@ class UserHandler
 
     private function setUserId()
     {
-        $this->user_info['user_id'] = Auth::user()->getAuthIdentifier();
+        $this->user_info['id'] = Auth::user()->getAuthIdentifier();
     }
 
     // private function setOfficeRowList()
@@ -113,8 +113,8 @@ class UserHandler
     private function setOfficeListIndex()
     {
         // foreach ($this->user_info['office_row_list'] as $val) {
-        foreach (M_TelsStaff::where('user_id', '=', $this->user_info['user_id'])->get()->toArray() as $val) {
-            array_push($this->user_info['office_list_index'], $val['tels_id']);
+        foreach (M_TelMember::where('user_id', '=', $this->user_info['id'])->get()->toArray() as $val) {
+            array_push($this->user_info['office_list_index'], $val['tel_id']);
         }
     }
 

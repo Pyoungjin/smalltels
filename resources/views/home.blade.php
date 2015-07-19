@@ -5,13 +5,6 @@
 
 @section('head')
 	@parent
-
-	@if(count($list = User::info('office_list')))
-		@foreach ( $list as $val)
-		{{-- {{var_dump($val)}} --}}
-			<a href='/office/{{$val["id"]}}/board'>{{$val["name"]}}</a>
-		@endforeach
-	@endif
 @stop
 
 @section('content')

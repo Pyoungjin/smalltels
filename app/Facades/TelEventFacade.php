@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Illuminate\View\Factory
  */
-class Tels_staffFacade extends Facade
+class TelEventFacade extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -15,7 +15,7 @@ class Tels_staffFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Tels_staffCtr';
+        return 'TelEventHandler';
     }
 }
 

@@ -193,9 +193,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
-        'TelsEvent' => App\Facades\Tels_eventFacade::class,
-        'TelsList'  => App\Facades\Tels_listFacade::class,
-        'TelStaffs' => App\Facades\Tels_staffFacade::class,
+        'TelEvent' => App\Facades\TelEventFacade::class,
+        'TelsList'  => App\Facades\TelsListFacade::class,
+        'TelMember' => App\Facades\TelMemberFacade::class,
         'Office'    => App\Facades\OfficeHandlerFacade::class,
         'User'      => App\Facades\UserHandlerFacade::class,
 
