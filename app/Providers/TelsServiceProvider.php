@@ -9,6 +9,7 @@ use App\Http\Controllers\Foundation\TelEventHandler;
 use App\Http\Controllers\Foundation\TelAccountHandler;
 use App\Http\Controllers\Foundation\OfficeHandler;
 use App\Http\Controllers\Foundation\UserHandler;
+use App\Http\Controllers\Foundation\OfficeAccountHandler;
 
 
 class TelsServiceProvider extends ServiceProvider

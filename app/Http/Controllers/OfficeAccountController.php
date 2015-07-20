@@ -8,6 +8,7 @@ use Request;
 
 use Office;
 use User;
+use OAccount;
 
 use TelAccount;
 
@@ -33,6 +34,7 @@ class OfficeAccountController extends Controller{
 
     public function getIndex()
     {
+        OAccount::start();
     	return view('office.account');
     }
 
@@ -48,9 +50,12 @@ class OfficeAccountController extends Controller{
             );
         }
 
+        
+
         if(!TelAccount::insert(
             Office::info('id')
             , User::info('id')
+            , (Request::input('date'))?Request::input('date'):date("Y-m-d h:i:s")
             , Request::input('action')
             , Request::input('price')
             , Request::input('content')

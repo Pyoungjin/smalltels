@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Illuminate\View\Factory
  */
-class OfficeHandlerFacade extends Facade
+class OfficeAccountFacade extends Facade
 {
     /**
      * Get the registered name of the component.

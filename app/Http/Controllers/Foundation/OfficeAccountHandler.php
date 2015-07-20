@@ -5,6 +5,8 @@ namespace App\Http\controllers\Foundation;
 use Auth;
 use Request;
 
+use App\Model\M_TelAccount;
+
 
 // use App\Model\M_TelsList;
 // use App\Model\M_TelMember;
@@ -17,10 +19,11 @@ class OfficeAccountHandler
     // private $requsted_user_id = null;
     private $permission = null;
 
-    private $user_info = array(
-            'id'   => null
-            , 'office_list_index' => array()
-            , 'office_list' => array()
+    private $office_account_info = array(
+            'ledger' => array(),
+            'revenue' => 0,
+            'expense' => 0,
+            'amount' => 0,
         );
 
 
@@ -45,7 +48,10 @@ class OfficeAccountHandler
      */
     public function start()
     {
-
+        $this->setLedger();
+        $this->arrangeLedger();
+        // var_dump($this->office_account_info);
+        // exit();
     }
 
     /**
@@ -56,9 +62,36 @@ class OfficeAccountHandler
     public function info($key = null)
     {   
         if($key) {
-            return $this->user_info[$key];
+            return $this->office_account_info[$key];
         }
 
-        return $this->user_info;
+        return $this->office_account_info;
+    }
+
+    private function setLedger()
+    {
+        $search_month = (Request::input('date'))?Request::input('date').'%':date("Y-m").'%';
+        // var_dump($search_month);
+        // exit();
+        $this->office_account_info['ledger'] = M_TelAccount::where('tel_id','=',Request::route('tel_id'))
+            ->where('date','like', $search_month)
+            ->get(['id' ,'tel_id', 'user_id', 'date', 'action', 'price', 'content'])
+            ->toArray();
+    }
+
+    private function arrangeLedger()
+    {
+        foreach ($this->office_account_info['ledger'] as $val) {
+            if($val['action'] == 'revenue')
+            {
+                $this->office_account_info['revenue'] += $val['price']; 
+            }else if($val['action'] == 'expense')
+            {
+                $this->office_account_info['expense'] += $val['price']; 
+            }
+        }
+
+        $this->office_account_info['amount'] = $this->office_account_info['revenue'] - $this->office_account_info['expense'];
+
     }
 }

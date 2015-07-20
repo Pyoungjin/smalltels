@@ -30,6 +30,7 @@ Route::controller('/home', 'HomeController');
 Route::group(['prefix' => '/office/{tel_id}'], function () {
 	// var_dump('123');
 	// exit();
+	Route::pattern('date', '[0-9]+');
 	Route::controller('board/{date?}', 'OfficeBoardController');
 	Route::controller('account', 'OfficeAccountController');
 });
