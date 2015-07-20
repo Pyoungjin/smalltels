@@ -10,5 +10,5 @@
 @stop
 
 @section('content')
-	<div>내용내용</div>
+	<div>알림알</div>
 @stop

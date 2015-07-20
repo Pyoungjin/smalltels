@@ -31,14 +31,23 @@
 	    	<input type="submit" value="LogIn">
 	    </form>
     </div>
-     @if(!$errors->isEmpty())
-		<div id="errors_section">
-			에러있음
-			<br>
-			@foreach ($errors->all() as $error)
-				{{$error}}
-				<br>
-			@endforeach
-		</div>
-	@endif
+      {{-- error.start --}}
+        @if(!$errors->isEmpty())
+            <br><br><br>
+            <div id="errors_section">
+                에러있음
+                <br>
+                @foreach ($errors->all() as $error)
+                    {{$error}}
+                    <br>
+                @endforeach
+            </div>
+        @endif
+    {{-- error.end --}}
+    {{-- message.start --}}
+        @if($tmp_message = Session::get('message'))
+            <br><br><br>
+            <br>{{$tmp_message}}
+        @endif
+    {{-- message.end --}}
 @stop

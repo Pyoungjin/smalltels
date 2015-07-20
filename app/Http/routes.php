@@ -24,11 +24,12 @@ Route::get('/phpinfo', function () {
 
 Route::controller('/auth', 'Auth\AuthController');
 
-Route::controller('/home','HomeController');
+Route::controller('/home', 'HomeController');
 
-Route::controller('/office/{tel_id}','OfficeController');
-
-
-
-
-
+// Route::controller('/office/{tel_id}','OfficeController');
+Route::group(['prefix' => '/office/{tel_id}'], function () {
+	// var_dump('123');
+	// exit();
+	Route::controller('board/{date?}', 'OfficeBoardController');
+	Route::controller('account', 'OfficeAccountController');
+});

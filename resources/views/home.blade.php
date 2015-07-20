@@ -22,7 +22,4 @@
 	<a href="home/admin">개인정보 관리</a>
 	{{-- 각 고시원별 이동 탭 --}}
 	{{-- <a href="">@각고시원별 이동</a> --}}
-	@if($tmp_message = Session::get('message'))
-		<br>{{$tmp_message}}
-	@endif
 @stop

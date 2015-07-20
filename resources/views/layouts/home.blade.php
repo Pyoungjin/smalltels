@@ -6,6 +6,7 @@
         <title>Smalltels - @yield('title')</title>
     </head>
     <body>
+
         <div style='border-bottom: 3px solid black; margin: 5px; '>
             @section('head')
                 <a href="/home" style="background-color: blue; color: white;">HOME</a>
@@ -26,5 +27,24 @@
 
             @yield('content')
         </div>
+        {{-- error.start --}}
+        @if(!$errors->isEmpty())
+            <br><br><br>
+            <div id="errors_section">
+                에러있음
+                <br>
+                @foreach ($errors->all() as $error)
+                    {{$error}}
+                    <br>
+                @endforeach
+            </div>
+        @endif
+    {{-- error.end --}}
+    {{-- message.start --}}
+        @if($tmp_message = Session::get('message'))
+            <br><br><br>
+            <br>{{$tmp_message}}
+        @endif
+    {{-- message.end --}}
     </body>
 </html>  

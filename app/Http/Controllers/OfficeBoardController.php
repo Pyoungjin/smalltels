@@ -9,14 +9,14 @@ use Office;
 use User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\OfficeAccountTrait;
+// use App\Http\Controllers\OfficeAccountTrait;
 
 
 
 
-class OfficeController extends Controller{
+class OfficeBoardController extends Controller{
 
-    use OfficeAccountTrait;
+    // use OfficeAccountTrait;
 
 	/**
 	 * [__construct description]
@@ -30,10 +30,8 @@ class OfficeController extends Controller{
 
     }
 
-    public function getBoard($tel_id)
+    public function getIndex()
     {
-        // var_dump('test');
-        // exit();
     	return view('office.board');
     }
 
