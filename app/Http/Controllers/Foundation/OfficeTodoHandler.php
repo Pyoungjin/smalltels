@@ -33,7 +33,7 @@ class OfficeTodoHandler
         'list_count'=> null,
         );
 
-    private $rtodo_history_contents = array();
+    private $default_info = array();
 
     public function __construct()
     {
@@ -65,16 +65,6 @@ class OfficeTodoHandler
     }
 
     /**
-     * 새로운 정보가 입력되었을시 해당 사항을 tel_rtodo_history테이블에 반영한다.
-     */
-    public function updateRtodoHistory()
-    {
-        $this->setTargetDate(true);
-        $this->setRTodoHistoryDataForUpdate();
-        $this->setRtodoHistoryContentInfo();
-    }
-
-    /**
      * 1. history에 해당 tel_id와 target_month에 조건이 충족하는 데이터가 있는지 확인한다.
      * 2. 없다면 생성한다.
      *     2-1 요청한 월이 현제인지 확인 후 상이하다면 데이터 없음을 반송한다.
@@ -86,7 +76,7 @@ class OfficeTodoHandler
     {
         $this->setTargetDate();
         $this->setRTodoHistoryData();
-        $this->setRtodoHistoryContentInfo();
+        $this->setDefaultInfo();
         $this->setInfo();
         $this->setListCount();
 
@@ -96,9 +86,9 @@ class OfficeTodoHandler
         
     }
 
-    private function setTargetDate($now = false)
+    private function setTargetDate()
     {
-        if(!Request::input('target_month') || $now == true)
+        if(!Request::input('target_month'))
         {
             Request::merge(['target_month' => date('Y-m')]);
         }
@@ -271,9 +261,9 @@ class OfficeTodoHandler
 
     }
 
-    private function setRtodoHistoryContentInfo()
+    private function setDefaultInfo()
     {
-        $this->rtodo_history_contents = json_decode($this->rtodo_history_arr['content'],true);
+        $this->default_info = json_decode($this->rtodo_history_arr['content'],true);
     }
 
     private function setInfo()
@@ -286,7 +276,7 @@ class OfficeTodoHandler
 
     private function setInfoContent()
     {
-        $tmp_arr = $this->rtodo_history_contents;
+        $tmp_arr = $this->default_info;
         foreach ($tmp_arr as $key => $val) {
             $tmp_arr[$key]['do_date'] = array();
             foreach($val['do'] as $do_list){
@@ -299,35 +289,10 @@ class OfficeTodoHandler
 
     private function setListCount()
     {
-        $this->info['list_info'] = count($this->rtodo_history_contents);
+        $this->info['list_info'] = count($this->default_info);
     }
 
-    private function setRTodoHistoryDataForUpdate()
-    {
-        if(!count($history_data = $this->getRtodoHistory()))
-        {  
-            $target_month = date_create($this->target_month)->format('Y-m');
-            $current_month = date_create()->format('Y-m');
-
-            if($target_month == $current_month)//요청한 달과 지금 차이가 있다면..
-            {
-                //데이터 생성
-                $history_data = $this->insertRTodoHistory();
-            }
-            else//요청한 달이 현제라면..
-            {
-                //데이터 없음 내보내기
-                var_dump('요청한 달에 데이터 없음');
-                exit();
-            }
-        }else{
-            $history_data = $history_data[0];
-        }
-
-        $this->rtodo_history_arr = $history_data;
-
-        // var_dump($this->rtodo_history_arr);
-    }
+    
     
 
 
