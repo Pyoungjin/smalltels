@@ -38,27 +38,39 @@ Route::group(['prefix' => '/office/{tel_id}'], function () {
 
 Route::get('/test',function() {
 
-	// response()->header('Content-Type', 'text/html; charset=UTF-8');
+	$a = array(
+		1 => array('a','b'),
+		2 => array('er','wr')
+		);
+	$g = array(
+		1 => array('a','b'),
+		2 => array('er','wr')
+		);
+	$b = array(
+		2 => array('a','b'),
+		4 => array('er','wr')
+		);
+	$c = array(
+		1 => array('a','c'),
+		2 => array('er','wr')
+		);
+	$d = array(
+		1 => array('a','b','c'),
+		2 => array('er','wr')
+		);
+	$e = array(
+		'1',
+		'2'
+		);
+	$f = array(
+		'1',
+		'2'
+		);
+	// var_dump();
+	var_dump($e == $f);
+	// var_dump(array_diff($a, $c));
+	// var_dump(array_diff($a, $d));
 
- //        var_dump(headers_list());
- //        exit();
-        
-	$a=date_create('2015-08-1');
-	$b=date_create('2015-06-30');
-	$c = date_create('2015-07');
-	$d = date_create(date('Y-m-d'));
-	$aa = date_diff($a,$d);
-	$aa1 = date_diff($b,$d);
-	$aa2 = date_diff($d,$c);
-	// $bb = date_diff('2015-06-01',date('Y-m-d'));
-	var_dump($aa);
-	// var_dump($aa->invert);
-	// var_dump('||');
-	// var_dump($aa1->m);
-	// var_dump($aa1->invert);
-	// var_dump('||');
-	// var_dump($aa2->m);
-	// var_dump($aa2->invert);
-	// var_dump($bb);
+
 	exit();
 });

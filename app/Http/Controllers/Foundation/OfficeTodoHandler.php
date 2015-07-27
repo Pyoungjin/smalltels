@@ -24,10 +24,11 @@ class OfficeTodoHandler
 
     private $start = false;
     private $target_month = null;
-    private $rtodo_history_arr = array();
+    private $rtodo_history_data = array();
+    private $rtodo_history_content = array();
 
     private $rtodo_data_arr = array();//tel_rtodo_history테이블에 데이터 입력시 필요
-    private $rtodo_history_raw = array();//tel_rtodo_history테이블에 데이터 입력시 필요
+    private $rtodo_history_new = array();//tel_rtodo_history테이블에 데이터 입력시 필요
 
     private $info = array(
         'id'        => null,
@@ -37,7 +38,7 @@ class OfficeTodoHandler
         'list_count'=> null,
         );
 
-    private $rtodo_history_content = array();
+   
 
     public function __construct()
     {
@@ -123,9 +124,9 @@ class OfficeTodoHandler
             $history_data = $history_data[0];
         }
 
-        $this->rtodo_history_arr = $history_data;
+        $this->rtodo_history_data = $history_data;
 
-        // var_dump($this->rtodo_history_arr);
+        // var_dump($this->rtodo_history_data);
     }
 
     private function getRtodoHistory()
@@ -153,33 +154,26 @@ class OfficeTodoHandler
      *             2-1-3-3 
      *                 2-1-3-3-1 해당날짜가 벗어나지 않았다면 날짜를 입력한다.
      *                 2-1-3-3-2 날짜가 벗어놨다면 직전 날짜를 rtodo::last_date에 업데이트한다.
-     *      2-2 $rtodo_history_raw에 각 결과를 push한다.
-     *  3. rtodo_history_raw를 json으로 인코딩한다.
+     *      2-2 $rtodo_history_new에 각 결과를 push한다.
+     *  3. rtodo_history_new를 json으로 인코딩한다.
      *  4. tel_rtodo_history테이블에 인설트한다.
      */
     private function insertRTodoHistory()
     {
-        $this->setRTodoDateArr();
-        $this->makeRTodoHistoryRaw();
-        // var_dump($this->rtodo_history_raw);
+        $this->setRTodoDataArr();
+        $this->makeRTodoHistoryNew();
+        // var_dump($this->rtodo_history_new);
         // exit();
         $this->updateRTodoLastDate();
+        ksort($this->rtodo_history_new);
         return M_TelRTodoHistory::create([
             'tel_id'    => Office::info('id'),
             'target_month'  => date('Y-m-d'),
-            'content'   => json_encode($this->rtodo_history_raw)//이거 고쳐야됨.
+            'content'   => json_encode($this->rtodo_history_new)//이거 고쳐야됨.
         ])->toArray();   
     }
 
-    private function updateRTodoLastDate()
-    {   
-        foreach ($this->rtodo_history_raw as $key => $val) {
-            M_TelRTodo::find($val['rtodo_id'])->update(['last_date' => end($val['date'])]);
-        }
-        
-    }
-
-    private function setRTodoDateArr()
+    private function setRTodoDataArr()
     {
         $this->rtodo_data_arr = M_TelRTodo::where('tel_id','=',Office::info('id'))
             ->get()->toArray();
@@ -187,13 +181,24 @@ class OfficeTodoHandler
         // var_dump($this->rtodo_data_arr);
     }
 
-    private function makeRTodoHistoryRaw()
+    private function makeRTodoHistoryNew()
     {
         foreach ($this->rtodo_data_arr as $val) {
-            $this->rtodo_history_raw[$val['id']] = $this->setContent($val);
+            $this->rtodo_history_new[$val['id']] = $this->setContent($val);
         }
 
 
+    }
+
+    private function updateRTodoLastDate()
+    {   
+        foreach ($this->rtodo_history_new as $key => $val) {
+
+            M_TelRTodo::find($val['rtodo_id'])->update([
+                'last_date' => end($val['date'])
+                ]);
+        }
+        
     }
 
     private function setContent(array $data)
@@ -272,12 +277,12 @@ class OfficeTodoHandler
 
     private function setRTodoHistoryContent()
     {
-        $this->rtodo_history_content = json_decode($this->rtodo_history_arr['content'],true);
+        $this->rtodo_history_content = json_decode($this->rtodo_history_data['content'],true);
     }
 
     private function setInfo()
     {
-        $this->info['id']       = $this->rtodo_history_arr['id'];
+        $this->info['id']       = $this->rtodo_history_data['id'];
         $this->info['year']     = date_create($this->target_month)->format('Y');
         $this->info['month']    = date_create($this->target_month)->format('m');
         $this->info['content']  = $this->setInfoContent();
@@ -285,7 +290,11 @@ class OfficeTodoHandler
 
     private function setInfoContent()
     {
-        $tmp_arr = $this->rtodo_history_content;
+        $tmp_arr = array();
+        if(is_array($this->rtodo_history_content))
+        {
+            $tmp_arr = $this->rtodo_history_content;
+        }
 
         foreach ($tmp_arr as $key => $val) {
             $tmp_arr[$key]['do_date'] = array();
