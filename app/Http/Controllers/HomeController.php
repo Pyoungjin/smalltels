@@ -27,8 +27,11 @@ class HomeController extends Controller{
     public function __construct()
     {
     	$this->middleware('auth');
-    	// $user = Auth::user();
     	User::start();
+
+    	// $this->middleware('auth');
+    	// $user = Auth::user();
+    	// User::start();
     	// Office::start();
     	// var_dump($user->getAuthIdentifier());
     	// exit();
@@ -36,6 +39,7 @@ class HomeController extends Controller{
 
     public function getIndex()
     {
+    	// User::start();
     	return view('home');
     }
 

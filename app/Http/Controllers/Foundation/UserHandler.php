@@ -91,8 +91,8 @@ class UserHandler
     private function chkPermission()
     {
         if(!Auth::check()){
-            echo '접속오류 : '.' 로그인이 되어있지않습니다.';
-            exit();
+            echo '접속오류11 : '.' 로그인이 되어있지않습니다.';
+            // exit();
         }
 
         $this->permission = Auth::check();

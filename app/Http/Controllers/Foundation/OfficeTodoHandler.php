@@ -13,11 +13,15 @@ use App\Model\M_TelRTodoHistory;
 
 use Office;
 
+use App\Http\Controllers\Foundation\OfficeTodoTrait_Register;
+
 /**
  * 유저가 요청한 office todo의 정보를 가져온다.
  */
 class OfficeTodoHandler
 {
+    use OfficeTodoTrait_Register;
+
     private $start = false;
     private $target_month = null;
     private $rtodo_history_arr = array();
@@ -33,7 +37,7 @@ class OfficeTodoHandler
         'list_count'=> null,
         );
 
-    private $default_info = array();
+    private $rtodo_history_content = array();
 
     public function __construct()
     {
@@ -76,11 +80,11 @@ class OfficeTodoHandler
     {
         $this->setTargetDate();
         $this->setRTodoHistoryData();
-        $this->setDefaultInfo();
+        $this->setRTodoHistoryContent();
         $this->setInfo();
         $this->setListCount();
 
-        // var_dump($this->default_info);
+        // var_dump($this->rtodo_history_content);
         // var_dump($this->info);
         // exit();
         
@@ -103,12 +107,13 @@ class OfficeTodoHandler
             $target_month = date_create($this->target_month)->format('Y-m');
             $current_month = date_create()->format('Y-m');
 
-            if($target_month == $current_month)//요청한 달과 지금 차이가 있다면..
+            if($target_month == $current_month)//요청한 달과 지금 현제이면..
             {
                 //데이터 생성
                 $history_data = $this->insertRTodoHistory();
+
             }
-            else//요청한 달이 현제라면..
+            else//요청한 달이 현제가 아니면..
             {
                 //데이터 없음 내보내기
                 var_dump('요청한 달에 데이터 없음');
@@ -158,11 +163,20 @@ class OfficeTodoHandler
         $this->makeRTodoHistoryRaw();
         // var_dump($this->rtodo_history_raw);
         // exit();
+        $this->updateRTodoLastDate();
         return M_TelRTodoHistory::create([
             'tel_id'    => Office::info('id'),
             'target_month'  => date('Y-m-d'),
             'content'   => json_encode($this->rtodo_history_raw)//이거 고쳐야됨.
         ])->toArray();   
+    }
+
+    private function updateRTodoLastDate()
+    {   
+        foreach ($this->rtodo_history_raw as $key => $val) {
+            M_TelRTodo::find($val['rtodo_id'])->update(['last_date' => end($val['date'])]);
+        }
+        
     }
 
     private function setRTodoDateArr()
@@ -215,14 +229,9 @@ class OfficeTodoHandler
         
         $date = date_create($last_date);
 
-        // var_dump($date->format('Y-m-d'));
         $i = true;
         while($i){
             $date_month = $date->format('Y-m');
-            // $diff = date_diff($current_month, $date);
-            // // var_dump($date);
-            //  var_dump($date->format('Y-m-d'));
-            //  var_dump($diff->m);
              
             if($current_month == $date_month)
             {
@@ -261,9 +270,9 @@ class OfficeTodoHandler
 
     }
 
-    private function setDefaultInfo()
+    private function setRTodoHistoryContent()
     {
-        $this->default_info = json_decode($this->rtodo_history_arr['content'],true);
+        $this->rtodo_history_content = json_decode($this->rtodo_history_arr['content'],true);
     }
 
     private function setInfo()
@@ -276,7 +285,8 @@ class OfficeTodoHandler
 
     private function setInfoContent()
     {
-        $tmp_arr = $this->default_info;
+        $tmp_arr = $this->rtodo_history_content;
+
         foreach ($tmp_arr as $key => $val) {
             $tmp_arr[$key]['do_date'] = array();
             foreach($val['do'] as $do_list){
@@ -289,10 +299,10 @@ class OfficeTodoHandler
 
     private function setListCount()
     {
-        $this->info['list_info'] = count($this->default_info);
+        $this->info['list_info'] = count($this->rtodo_history_content);
     }
 
-    
+
     
 
 

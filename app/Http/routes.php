@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/', function () {
 	if(Auth::check()){
 		return redirect('/home');
@@ -19,6 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/phpinfo', function () {
+
 	return view('PHPInfo');
 });
 
@@ -28,13 +30,19 @@ Route::controller('/home', 'HomeController');
 
 // Route::controller('/office/{tel_id}','OfficeController');
 Route::group(['prefix' => '/office/{tel_id}'], function () {
+	// response()->header('Content-Type', 'text/html; charset=UTF-8');
 	Route::controller('board', 'OfficeBoardController');
 	Route::controller('account', 'OfficeAccountController');
 	Route::controller('todo', 'OfficeTodoController');
-
 });
 
 Route::get('/test',function() {
+
+	// response()->header('Content-Type', 'text/html; charset=UTF-8');
+
+ //        var_dump(headers_list());
+ //        exit();
+        
 	$a=date_create('2015-08-1');
 	$b=date_create('2015-06-30');
 	$c = date_create('2015-07');
