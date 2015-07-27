@@ -12,7 +12,9 @@ use App\Model\M_TelsList;
 use App\Model\M_TelMember;
 // use Illuminate\Http\Request;
 
-
+/**
+ * 유저가 요청한 office의 정보를 가져온다.
+ */
 class OfficeHandler
 {
     private $start = false;

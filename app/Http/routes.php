@@ -28,9 +28,29 @@ Route::controller('/home', 'HomeController');
 
 // Route::controller('/office/{tel_id}','OfficeController');
 Route::group(['prefix' => '/office/{tel_id}'], function () {
-	// var_dump('123');
-	// exit();
-	Route::pattern('date', '[0-9]+');
-	Route::controller('board/{date?}', 'OfficeBoardController');
+	Route::controller('board', 'OfficeBoardController');
 	Route::controller('account', 'OfficeAccountController');
+	Route::controller('todo', 'OfficeTodoController');
+
+});
+
+Route::get('/test',function() {
+	$a=date_create('2015-08-1');
+	$b=date_create('2015-06-30');
+	$c = date_create('2015-07');
+	$d = date_create(date('Y-m-d'));
+	$aa = date_diff($a,$d);
+	$aa1 = date_diff($b,$d);
+	$aa2 = date_diff($d,$c);
+	// $bb = date_diff('2015-06-01',date('Y-m-d'));
+	var_dump($aa);
+	// var_dump($aa->invert);
+	// var_dump('||');
+	// var_dump($aa1->m);
+	// var_dump($aa1->invert);
+	// var_dump('||');
+	// var_dump($aa2->m);
+	// var_dump($aa2->invert);
+	// var_dump($bb);
+	exit();
 });

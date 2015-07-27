@@ -75,7 +75,7 @@ class OfficeAccountHandler
         // exit();
         $this->office_account_info['ledger'] = M_TelAccount::where('tel_id','=',Request::route('tel_id'))
             ->where('date','like', $search_month)
-            ->get(['id' ,'tel_id', 'user_id', 'date', 'action', 'price', 'content'])
+            ->get(['id' ,'tel_id', 'writer_user_id', 'date', 'action', 'price', 'content'])
             ->toArray();
     }
 

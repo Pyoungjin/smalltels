@@ -11,8 +11,7 @@
 
 @section('content')
 	<div>
-		<form method="post" action="/{{Request::Path()}}/recoder">
-		{{-- <form method="post" action="recoder"> --}}
+		<form action="/{{Request::Path()}}/recoder" method="post">
 			<input type="hidden" name="_token" value="{{ csrf_token() }}">
 			<select name='action'>
 				<option value="revenue">수입</option>

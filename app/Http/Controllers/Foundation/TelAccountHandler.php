@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
  */
 class TelAccountHandler
 {
-    public function insert($tel_id, $user_id, $date, $action, $price, $content)
+    public function insert($tel_id, $writer_user_id, $date, $action, $price, $content)
     {
         return M_TelAccount::create([
             'tel_id'    => $tel_id
-            , 'user_id' => $user_id
+            , 'writer_user_id' => $writer_user_id
             , 'date'    => $date
             , 'action'  => $action
             , 'price'   => $price
