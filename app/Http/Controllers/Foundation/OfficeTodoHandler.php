@@ -51,6 +51,9 @@ class OfficeTodoHandler
      */
     public function start()
     {
+        if($this->start){
+            return $this;
+        }
         $this->start = true;
         $this->setRtodoHistory();
 
@@ -64,6 +67,10 @@ class OfficeTodoHandler
      */
     public function info($key = null)
     {   
+        if(!$this->start)
+        {
+            $this->start();
+        }
         if($key) {
             return $this->info[$key];
         }
@@ -71,9 +78,13 @@ class OfficeTodoHandler
         return $this->info;
     }
 
-    public function complateUpdate()
+    public function updateComplate()
     {
         // Request::input('history_id');
+        if(!$this->start)
+        {
+            $this->start();
+        }
         $rtodo_id = Request::input('rtodo_id');
 
         $this->rtodo_history_content[$rtodo_id]['do'][date('Y-m-d')]['user_id'] = User::info('id');

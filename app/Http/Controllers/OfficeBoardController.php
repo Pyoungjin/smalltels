@@ -25,8 +25,8 @@ class OfficeBoardController extends Controller{
     {
     	$this->middleware('auth');
 
-    	User::start();
-    	Office::start();
+    	// User::start();
+    	// Office::start();
 
     }
 

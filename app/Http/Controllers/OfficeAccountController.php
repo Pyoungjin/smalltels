@@ -26,8 +26,8 @@ class OfficeAccountController extends Controller{
     	$this->middleware('auth');
 
         
-    	User::start();
-    	Office::start();
+    	// User::start();
+    	// Office::start();
 
 
     }

@@ -47,12 +47,7 @@ class OfficeHandler
     /**
      * 단위 고시원의 정보를 담은 객체를 생성하는 클래스
      */
-    public function __construct()
-    {
-        
-
-
-    }
+    public function __construct(){}
 
     /**
      * 객체 사용을 시작할때 호출합니다. 객체의 기본 설정을 세팅합니다.
@@ -60,6 +55,9 @@ class OfficeHandler
      */
     public function start()
     {
+        if($this->start){
+            return true;
+        }
         $this->start = true;
 
         $this->setReqTelId();
@@ -70,6 +68,8 @@ class OfficeHandler
 
         $this->setInfo();
         $this->arrangeMember();
+
+        return $this;
     }
 
     /**
@@ -78,7 +78,7 @@ class OfficeHandler
      */
     public function chkPermission()
     {   
-        if($this->start == false) {
+        if(!$this->start) {
             $this->start();
         }
         if($this->user_permission === false) {
@@ -96,6 +96,9 @@ class OfficeHandler
      */
     public function info($key = null)
     {   
+        if(!$this->start) {
+            $this->start();
+        }
         if($key) {
             return $this->tel_info[$key];
         }

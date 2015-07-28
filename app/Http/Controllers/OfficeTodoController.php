@@ -25,8 +25,8 @@ class OfficeTodoController extends Controller{
     {
         $this->middleware('auth');
 
-        User::start();
-        Office::start();
+        // User::start();
+        // Office::start();
             // var_dump(Office::info());
         // exit();
     }
@@ -51,7 +51,7 @@ class OfficeTodoController extends Controller{
 
     public function postComplate()
     {
-        if(!OTodo::start()->complateUpdate())
+        if(!OTodo::updateComplate())
         {
             return redirect()->back()->with('message','failed : '.'complate update');
         }

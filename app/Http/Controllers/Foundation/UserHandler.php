@@ -47,8 +47,6 @@ class UserHandler
      */
     public function start()
     {
-        
-
         if($this->start){
             return true;
         }
@@ -61,6 +59,8 @@ class UserHandler
         // $this->setOfficeRowList();
         $this->setOfficeListIndex();
         $this->arrangeOfficeList();
+
+        return $this;
     }
 
     /**
@@ -70,6 +70,9 @@ class UserHandler
      */
     public function info($key = null)
     {   
+        if(!$this->start){
+            $this->start();
+        }
         if($key) {
             return $this->user_info[$key];
         }
@@ -79,7 +82,9 @@ class UserHandler
 
     public function check()
     {
-        $this->start();
+        if(!$this->start){
+            $this->start();
+        }
         return Auth::check();
     }
 
