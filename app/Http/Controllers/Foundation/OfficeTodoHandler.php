@@ -2,7 +2,7 @@
 
 namespace App\Http\controllers\Foundation;
 
-use Auth;
+use User;
 use Request;
 // use TelsEvent;
 // use TelsList;
@@ -53,6 +53,8 @@ class OfficeTodoHandler
     {
         $this->start = true;
         $this->setRtodoHistory();
+
+        return $this;
     }
 
     /**
@@ -67,6 +69,19 @@ class OfficeTodoHandler
         }
 
         return $this->info;
+    }
+
+    public function complateUpdate()
+    {
+        // Request::input('history_id');
+        $rtodo_id = Request::input('rtodo_id');
+
+        $this->rtodo_history_content[$rtodo_id]['do'][date('Y-m-d')]['user_id'] = User::info('id');
+        $this->rtodo_history_content[$rtodo_id]['do'][date('Y-m-d')]['date'] = date('Y-m-d');
+
+        return M_TelRTodoHistory::find($this->info['id'])->update([
+            'content' => json_encode($this->rtodo_history_content)
+            ]);
     }
 
     /**

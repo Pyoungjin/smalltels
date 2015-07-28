@@ -49,7 +49,7 @@
 				<td>{{$val['price']}}</td>
 				@endif
 				<td>{{$val['content']}}</td>
-				<td>{{$val['user_id']}}</td>
+				<td>{{$val['id']}}</td>
 			</tr>
 		@endforeach
 		</table>

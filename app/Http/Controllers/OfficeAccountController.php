@@ -60,10 +60,10 @@ class OfficeAccountController extends Controller{
             , Request::input('price')
             , Request::input('content')
             )){
-            return redirect()->back()->with('message','기록실패');
+            return redirect()->back()->with('message','failed : '.'Account Record');
         }
 
-        return redirect()->back()->with('message','기록되었습니다.');
+        return redirect()->back()->with('message','successed :'.'Account Record');
     }
 
     private function chkValidator()
