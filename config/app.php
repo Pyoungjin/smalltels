@@ -204,6 +204,7 @@ return [
         'Office'    => App\Facades\OfficeHandlerFacade::class,
         'OAccount'  => App\Facades\OfficeAccountFacade::class,
         'OTodo'     => App\Facades\OfficeTodoFacade::class,
+        'ORoom'     => App\Facades\OfficeRoomFacade::class,
 
     ],
 

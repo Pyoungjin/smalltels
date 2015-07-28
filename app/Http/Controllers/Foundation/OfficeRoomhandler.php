@@ -2,8 +2,11 @@
 
 namespace App\Http\controllers\Foundation;
 
+use Validator;
+
 use User;
 use Request;
+
 // use TelsEvent;
 // use TelsList;
 // use TelStaffs;
@@ -25,12 +28,12 @@ class OfficeRoomHandler
     private $room_list = array();
 
     private $info = array(
-        'list' => array();
+        'list' => array()
         );
 
    
 
-    private function __construct()
+    public function __construct()
     {
 
     }
@@ -41,6 +44,11 @@ class OfficeRoomHandler
      */
     public function start()
     {
+        if($this->start)
+        {
+            return $this;
+        }
+
         $this->start = true;
         $this->setTelId();
         $this->setRoomList();
@@ -57,11 +65,62 @@ class OfficeRoomHandler
      */
     public function info($key = null)
     {   
+        if(!$this->start)
+        {
+            $this->start();
+        }
         if($key) {
             return $this->info[$key];
         }
 
         return $this->info;
+    }
+
+    public function count($key)
+    {
+        if(!$this->start)
+        {
+            $this->start();
+        }
+        if(!array_key_exists($key,$this->info))
+        {
+            return 'null';
+        }
+        return count($this->info[$key]);
+
+    }
+
+    public function addRoom()
+    {
+        $order = Request::input('order');
+        $tmp_result = array();
+        $validator = $this->chkValidator();
+        
+        if ($validator->fails()) {
+            $request = Request::instance();
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        for ($i = $order; $i ; $i--) { 
+            array_push($tmp_result, M_TelRoom::insert([
+                'tel_id' => Office::info('id'),
+                'state' => 'empty'
+                ]));
+        }
+
+        if(count($tmp_result) != $order){
+            return false;
+        }
+
+        return true;
+    }
+    private function chkValidator()
+    {
+        return Validator::make(Request::all(), [
+                'order' => 'numeric|max:100',
+            ]);
     }
 
     private function setTelId()
@@ -80,6 +139,7 @@ class OfficeRoomHandler
     {
         $this->info['list'] = $this->room_list;
     }
+
 
 
 

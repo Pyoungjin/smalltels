@@ -6,6 +6,7 @@ use Request;
 
 use Office;
 use User;
+use ORoom;
 
 use App\Http\Controllers\Controller;
 
@@ -32,6 +33,16 @@ class OfficeRoomController extends Controller{
     	return view('office.room');
     }
 
+    public function postAddRoom()
+    {
+        if(!ORoom::addRoom())
+        {
+            return redirect()->back()->with('message','failed : '.'Room addRoom');
+        }
+
+        return redirect()->back()->with('message','successed :'.'Room addRoom');
+    }
+
     // public function postRecoder()
     // {
          
@@ -54,7 +65,7 @@ class OfficeRoomController extends Controller{
     //         , Request::input('price')
     //         , Request::input('content')
     //         )){
-    //         return redirect()->back()->with('message','failed : '.'Account Record');
+    //         
     //     }
 
     //     return redirect()->back()->with('message','successed :'.'Account Record');
