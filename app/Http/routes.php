@@ -34,6 +34,7 @@ Route::group(['prefix' => '/office/{tel_id}'], function () {
 	Route::controller('board', 'OfficeBoardController');
 	Route::controller('account', 'OfficeAccountController');
 	Route::controller('todo', 'OfficeTodoController');
+	Route::controller('room','OfficeRoomController');
 });
 
 Route::get('/test',function() {
