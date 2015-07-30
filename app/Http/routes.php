@@ -31,10 +31,11 @@ Route::controller('/home', 'HomeController');
 // Route::controller('/office/{tel_id}','OfficeController');
 Route::group(['prefix' => '/office/{tel_id}'], function () {
 	// response()->header('Content-Type', 'text/html; charset=UTF-8');
-	Route::controller('board', 'OfficeBoardController');
-	Route::controller('account', 'OfficeAccountController');
-	Route::controller('todo', 'OfficeTodoController');
-	Route::controller('room','OfficeRoomController');
+	Route::controller('board',	'OfficeBoardController');
+	Route::controller('account','OfficeAccountController');
+	Route::controller('todo',	'OfficeTodoController');
+	Route::controller('room',	'OfficeRoomController');
+	Route::controller('tenant',	'OfficeTenantController');
 });
 
 Route::get('/test',function() {

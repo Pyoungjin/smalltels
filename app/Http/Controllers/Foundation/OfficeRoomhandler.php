@@ -12,7 +12,7 @@ use Request;
 // use TelStaffs;
 
 use App\Model\M_TelRoom;
-use App\Model\M_TelRoomIssue;
+use App\Model\M_TelRoomNote;
 
 use Office;
 

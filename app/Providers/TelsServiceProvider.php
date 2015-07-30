@@ -15,6 +15,7 @@ use App\Http\Controllers\Foundation\OfficeHandler;
 use App\Http\Controllers\Foundation\OfficeAccountHandler;
 use App\Http\Controllers\Foundation\OfficeTodoHandler;
 use App\Http\Controllers\Foundation\OfficeRoomHandler;
+use App\Http\Controllers\Foundation\OfficeTenantHandler;
 
 
 
@@ -70,6 +71,9 @@ class TelsServiceProvider extends ServiceProvider
         });
         $this->app->singleton('OfficeRoomHandler', function () {
             return new OfficeRoomHandler;
+        });
+        $this->app->singleton('OfficeTenantHandler', function () {
+            return new OfficeTenantHandler;
         });
     }
 }

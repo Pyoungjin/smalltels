@@ -4,7 +4,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class M_TelRoomIssue extends Model
+class M_TelRoomNote extends Model
 {
     // use Authenticatable, CanResetPassword;
     use SoftDeletes;
@@ -14,14 +14,14 @@ class M_TelRoomIssue extends Model
      *
      * @var string
      */
-    protected $table = 'tel_room_issue';
+    protected $table = 'tel_room_note';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['room_id', 'issue', 'user_id'];
+    protected $fillable = ['room_id', 'note', 'user_id'];
 
     /**
      * The attributes excluded from the model's JSON form.

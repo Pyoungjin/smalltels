@@ -30,6 +30,7 @@
 		@foreach (($oroom = ORoom::info('list')) as $key => $val)
 		<tr>
 			<form action="/{{Request::Path()}}/add-room-info" method="post">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 				<td>
 					<input type='text' value="{{$val['name']}}" placeholder="이름(또는 호수)를 입력해주세요.">
 				</td>
