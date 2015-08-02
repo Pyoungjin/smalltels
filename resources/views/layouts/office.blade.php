@@ -2,8 +2,10 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="/assets/CSS/css_reset.css">
         <title>Smalltels - @yield('title')</title>
+        <link rel="stylesheet" type="text/css" href="/css/css_reset.css">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap.min.css">
+        @yield('css')
     </head>
     <body>
         <div style='border-bottom: 3px solid black; margin: 5px; '>
@@ -58,6 +60,9 @@
             <br>{{$tmp_message}}
         @endif
     {{-- message.end --}}
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        @yield('javascript')
 
     </body>
 </html>  
