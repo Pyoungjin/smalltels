@@ -5,51 +5,58 @@
         <title>Smalltels - @yield('title')</title>
         <link rel="stylesheet" type="text/css" href="/css/css_reset.css">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap.min.css">
+        <style>
+            body{
+                padding-top: 45px;
+            }
+        
+        </style>
         @yield('css')
     </head>
     <body>
-
-        <div style='border-bottom: 3px solid black; margin: 5px; '>
-            @section('head')
-                <a href="/home" style="background-color: blue; color: white;">HOME</a>
-                @if(User::check())
-                    <a href="/auth/logout">로그아웃</a>
-                    @if(count($list = User::info('office_list')))
-                        @foreach ( $list as $val)
-                        {{-- {{var_dump($val)}} --}}
-                            <a href='/office/{{$val["id"]}}/board'>{{$val["name"]}}</a>
-                        @endforeach
-                    @endif
-                @endif
-
-
-            @show
-        </div>
-        <div class="container">
-
-            @yield('content')
-        </div>
-        {{-- error.start --}}
-        @if(!$errors->isEmpty())
-            <br><br><br>
-            <div id="errors_section">
-                에러있음
-                <br>
-                @foreach ($errors->all() as $error)
-                    {{$error}}
-                    <br>
-                @endforeach
+    {{-- 최상단 메뉴 --}}
+    @include('parts.top_head')
+    <div class='container'>
+    {{-- 홈/고시원 선택 --}}
+        <div class='row'>
+            <div class='span12'>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="/home">HOME</a>
+                    </li>
+                    @foreach ( (User::info('office_list')) as $val)
+                    <li>
+                        <a href='/office/{{$val["id"]}}/board'>{{$val["name"]}}</a>
+                    </li>
+                    @endforeach
+                    </ul>
             </div>
-        @endif
-    {{-- error.end --}}
-    {{-- message.start --}}
-        @if($tmp_message = Session::get('message'))
-            <br><br><br>
-            <br>{{$tmp_message}}
-        @endif
-    {{-- message.end --}}
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        @yield('javascript')
+        </div>
+    {{-- alert 표시 --}}
+        @include('parts.alert_bar')
+    </div>
+    <div class='container'>
+        <div class='row' style='margin-bottom: 20px;'>
+            <div class='span12'>
+    {{-- home --}}
+                <a class='btn' href="/home">Home</a>
+
+    {{-- 고시원 등록 --}}
+                <a class='btn' href="/home/tel-register">고시원 등록</a>
+    {{-- 총무 신청 --}}
+                <a class='btn' href="/home/application">총무 신청</a>
+    {{-- 사용설명서 --}}
+                <a class='btn' href="/home/manual">Smalltels 사용법</a>
+    {{-- 개인정보관리 --}}
+                <a class='btn' href="/home/admin">마이페이</a>
+            </div>
+        </div>
+        @yield('content')
+        
+    </div>
+    {{-- javascript --}}
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    @yield('javascript')
     </body>
 </html>  

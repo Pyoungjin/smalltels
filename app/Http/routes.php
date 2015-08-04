@@ -12,18 +12,22 @@
 */
 
 
-Route::get('/', function () {
-	if(Auth::check()){
-		return redirect('/home');
-	}
-    return view('welcome');
-});
-
 Route::get('/phpinfo', function () {
 
 	return view('PHPInfo');
 });
 
+Route::get('/', function () {
+	$this->middleware('guest', []);
+	// if(Auth::check()){
+	// 	return redirect('/home');
+	// }
+    return view('welcome');
+});
+
+// Route::post('/auth/login', function () {
+// 	var_dump(Re)
+// });
 Route::controller('/auth', 'Auth\AuthController');
 
 Route::controller('/home', 'HomeController');
@@ -39,40 +43,5 @@ Route::group(['prefix' => '/office/{tel_id}'], function () {
 });
 
 Route::get('/test',function() {
-
-	$a = array(
-		1 => array('a','b'),
-		2 => array('er','wr')
-		);
-	$g = array(
-		1 => array('a','b'),
-		2 => array('er','wr')
-		);
-	$b = array(
-		2 => array('a','b'),
-		4 => array('er','wr')
-		);
-	$c = array(
-		1 => array('a','c'),
-		2 => array('er','wr')
-		);
-	$d = array(
-		1 => array('a','b','c'),
-		2 => array('er','wr')
-		);
-	$e = array(
-		'1',
-		'2'
-		);
-	$f = array(
-		'1',
-		'2'
-		);
-	// var_dump();
-	var_dump($e == $f);
-	// var_dump(array_diff($a, $c));
-	// var_dump(array_diff($a, $d));
-
-
-	exit();
+	return view('welcome');
 });

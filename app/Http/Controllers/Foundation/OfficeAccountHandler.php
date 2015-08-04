@@ -19,11 +19,14 @@ class OfficeAccountHandler
     // private $requsted_user_id = null;
     private $permission = null;
 
-    private $office_account_info = array(
+    private $info = array(
             'ledger' => array(),
             'revenue' => 0,
             'expense' => 0,
             'amount' => 0,
+            'search_month' => null,
+            'pre_month' => null,
+            'next_month' => null,
         );
 
 
@@ -50,8 +53,9 @@ class OfficeAccountHandler
     {
         $this->setLedger();
         $this->arrangeLedger();
-        // var_dump($this->office_account_info);
-        // exit();
+        $this->setMonth();
+
+       
     }
 
     /**
@@ -61,37 +65,57 @@ class OfficeAccountHandler
      */
     public function info($key = null)
     {   
+        if(!$this->start)
+        {
+            $this->start();
+        }
         if($key) {
-            return $this->office_account_info[$key];
+            return $this->info[$key];
         }
 
-        return $this->office_account_info;
+        return $this->info;
     }
 
     private function setLedger()
     {
-        $search_month = (Request::input('date'))?Request::input('date').'%':date("Y-m").'%';
-        // var_dump($search_month);
-        // exit();
-        $this->office_account_info['ledger'] = M_TelAccount::where('tel_id','=',Request::route('tel_id'))
-            ->where('date','like', $search_month)
+        $this->info['search_month'] = (Request::input('date'))?Request::input('date'):date('Y-m');
+ 
+        $this->info['ledger'] = M_TelAccount::where('tel_id','=',Request::route('tel_id'))
+            ->where('date','like', $this->info['search_month']."%")
             ->get(['id' ,'tel_id', 'writer_user_id', 'date', 'action', 'price', 'content'])
             ->toArray();
     }
 
+    private function setMonth()
+    {
+        $this->info['pre_month'] = date_add(
+            date_create($this->info['search_month']),
+            date_interval_create_from_date_string('last month')
+            )->format('Y-m');
+
+        // var_dump($this->info['last_month']);
+        // exit();
+
+        $this->info['next_month'] = date_add(
+            date_create($this->info['search_month']),
+            date_interval_create_from_date_string('next month')
+            )->format('Y-m');
+
+    }
+
     private function arrangeLedger()
     {
-        foreach ($this->office_account_info['ledger'] as $val) {
+        foreach ($this->info['ledger'] as $val) {
             if($val['action'] == 'revenue')
             {
-                $this->office_account_info['revenue'] += $val['price']; 
+                $this->info['revenue'] += $val['price']; 
             }else if($val['action'] == 'expense')
             {
-                $this->office_account_info['expense'] += $val['price']; 
+                $this->info['expense'] += $val['price']; 
             }
         }
 
-        $this->office_account_info['amount'] = $this->office_account_info['revenue'] - $this->office_account_info['expense'];
+        $this->info['amount'] = $this->info['revenue'] - $this->info['expense'];
 
     }
 }

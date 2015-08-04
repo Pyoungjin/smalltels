@@ -18,11 +18,16 @@
 @stop
 
 @section('content')
-	
+    
     <div class='text-center'>
+    <br><br>
             <h1>로그인 또는 가입 해주세요</h1>
         </div>
-    {{-- <div class='row hero-unit'> --}}
+        <br>
+        <br>
+        <br>
+        <br>
+
     <div class='row '>
         
         <div class='span4 offset1 ' >
@@ -60,7 +65,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <div class="controls">
+                            <div class="controls pull-right">
                                 <input type="submit" value="Register" class='btn'>
                             </div>
                         </div>
@@ -85,7 +90,7 @@
                     <form action="/auth/login" method="post">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="control-group">
-                            <label class="control-label" for="inputRePw">email</label>
+                            <label class="control-label" for="inputEmail">email</label>
                             <div class="controls">
                                 <input name='email' type="text" placeholder="example@email.com">
                             </div>
@@ -97,7 +102,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <div class="controls">
+                            <div class="controls pull-right">
                                 <input type="submit" value="Login" class='btn'>
                             </div>
                         </div>
@@ -106,33 +111,12 @@
             </div>
 
         </div>
-        {{-- <div class='span2'>
-        </div> --}}
+
     </div>
 
-
-
-      {{-- error.start --}}
-        @if(!$errors->isEmpty())
-            <br><br><br>
-            <div id="errors_section">
-                에러있음
-                <br>
-                @foreach ($errors->all() as $error)
-                    {{$error}}
-                    <br>
-                @endforeach
-            </div>
-        @endif
-    {{-- error.end --}}
-    {{-- message.start --}}
-        @if($tmp_message = Session::get('message'))
-            <br><br><br>
-            <br>{{$tmp_message}}
-        @endif
-    {{-- message.end --}}
-
 @stop
+
+
 
 @section('javascript')
 <script>
