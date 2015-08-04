@@ -1,25 +1,52 @@
-@extends('layouts.welcome')
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>Smalltels - @yield('title')</title>
+        <link rel="stylesheet" type="text/css" href="/css/css_reset.css">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap.min.css">
+        <style>
+            body{
+                padding-top: 45px;
+            }
+        
+        </style>
+        <style>
+            .box{
+                border:2px solid #eee; 
+                border-radius: 5px; 
+                height:370px;
+            } 
+            .box:hover, .box:focus{
+                border-color: #333;
+            }
+        </style>
+    </head>
+    <body>
+    <div class='row'>
+    <div class='span12'>
+        <div class="navbar navbar-fixed-top navbar-inverse">
+            <div class="navbar-inner">
+                <ul class='nav pull-right'>
+                  
+                    <li >
+                        <a href="/auth/register">회원가입</a>
+                    </li>
+                    <li >
+                        <a href="/auth/login">로그긴</a>
+                    </li>
 
-@section('title')
-    Page Title
-@stop
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class='container'>
 
-@section('css')
-    <style>
-        .box{
-            border:2px solid #eee; 
-            border-radius: 5px; 
-            height:370px;
-        } 
-        .box:hover, .box:focus{
-            border-color: #333;
-        }
-    </style>
-@stop
 
-@section('content')
-    
-    <div class='text-center'>
+        <div class='text-center'>
     <br><br>
             <h1>로그인 또는 가입 해주세요</h1>
         </div>
@@ -39,7 +66,7 @@
                     <form action="/auth/register" method="post">
                         
                         
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="_token" value="<?php csrf_token() ?>">
                         <div class="control-group">
                             <label class="control-label" for="inputName">name</label>
                             <div class="controls">
@@ -86,7 +113,7 @@
             <div class='box'>
                 <div style='width:220px; margin: 20px auto;'>
                     <form action="/auth/login" method="post">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="_token" value="<?php csrf_token() ?>">
                         <div class="control-group">
                             <label class="control-label" for="inputEmail">email</label>
                             <div class="controls">
@@ -112,12 +139,8 @@
 
     </div>
 
-@stop
-
-
-
-@section('javascript')
-<script>
-
-</script>
-@stop
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>  

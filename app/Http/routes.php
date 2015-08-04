@@ -43,5 +43,9 @@ Route::group(['prefix' => '/office/{tel_id}'], function () {
 });
 
 Route::get('/test',function() {
+
+	// return view('welcome');
+	// var_dump('123');
+	// exit();
 	return view('welcome');
 });

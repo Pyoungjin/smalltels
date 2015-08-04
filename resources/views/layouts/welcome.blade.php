@@ -10,8 +10,9 @@
             body{
                 padding-top: 45px;
             }
-        @yield('css')
+        
         </style>
+        @yield('css')
 
     </head>
     <body>
