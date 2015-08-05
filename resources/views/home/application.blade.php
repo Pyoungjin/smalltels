@@ -1,7 +1,7 @@
 @extends('layouts.home')
 
-@section('title', '총무 신청')
-
+@section('title')
+	총무신청
 @stop
 
 @section('head')

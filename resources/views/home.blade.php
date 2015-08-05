@@ -1,7 +1,8 @@
 @extends('layouts.home')
 
-@section('title', 'Page Title')
-
+@section('title')
+    Page Title
+@stop
 
 @section('head')
 	@parent

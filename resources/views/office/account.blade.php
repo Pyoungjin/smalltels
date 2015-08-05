@@ -1,7 +1,8 @@
 @extends('layouts.office')
 
-@section('title', 'Office Account')
-
+@section('title')
+    Office Account
+@stop
 
 @section('head')
 	@parent
@@ -10,27 +11,6 @@
 @stop
 
 @section('content')
-	<div class='row'>
-		<div class='span10 offset1'>
-			<form class='form-inline text-center' action="/{{Request::Path()}}/recoder" method="post">
-				<input type="hidden" name="_token" value="{{ csrf_token() }}"> 
-				<select class='span1' name='action'>
-					<option value="revenue">수입</option>
-					<option value="expense">지출</option>
-				</select>
-				<div class="input-append">
-					<input type="text" name="price" placeholder="100000">
-					<span class="add-on">원</span>
-				</div>
-				<div class="input-prepend">
-					<span class="add-on">내용</span>
-					<input type="text" name="content" placeholder="ex) 101호 세입자 방세 납입">
-				</div>
-				<input class='btn btn-primary' type="submit" value="기록하기">
-			</form>
-			{{-- </div> --}}
-		</div>
-	</div>
 	<div class='row'>
 		<div class='span12 '>
 			<ul class="pager inline">
@@ -60,6 +40,30 @@
 			</ul>
 		</div>
 	</div>
+	<div class='row'>
+		<div class='span10 offset1'>
+			<form class='form-inline text-center' action="/{{Request::Path()}}/recoder" method="post">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}"> 
+				<input type="hidden" name="date" value="{{ Request::input('date') }}"> 
+				<div class="input-prepend">
+					<span class="add-on">내용</span>
+					<input type="text" name="content" placeholder="ex) 101호 세입자 방세 납입">
+				</div>
+				<select class='span1' name='action'>
+					<option value="revenue">수입</option>
+					<option value="expense">지출</option>
+				</select>
+				<div class="input-append">
+					<input type="text" name="price" placeholder="100000">
+					<span class="add-on">원</span>
+				</div>
+				
+				<input class='btn btn-primary' type="submit" value="기록하기">
+			</form>
+			{{-- </div> --}}
+		</div>
+	</div>
+	
 	@if(count($ledger = OAccount::info('ledger')))
 	<div class='row'>
 		<div class='span10 offset1'>

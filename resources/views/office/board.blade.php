@@ -1,7 +1,8 @@
 @extends('layouts.office')
 
-@section('title', 'Board')
-
+@section('title')
+    Board
+@stop
 
 @section('head')
 	@parent

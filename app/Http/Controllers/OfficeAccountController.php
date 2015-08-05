@@ -50,12 +50,10 @@ class OfficeAccountController extends Controller{
             );
         }
 
-        
-
-        if(!TelAccount::insert(
+        if(!OAccount::insert(
             Office::info('id')
             , User::info('id')
-            , (Request::input('date'))?Request::input('date'):date("Y-m-d h:i:s")
+            , $this->setDate()
             , Request::input('action')
             , Request::input('price')
             , Request::input('content')
@@ -63,7 +61,7 @@ class OfficeAccountController extends Controller{
             return redirect()->back()->with('message','failed : '.'Account Record');
         }
 
-        return redirect()->back()->with('message','successed :'.'Account Record');
+        return redirect()->back()->with('message','기록하였습니다.');
     }
 
     private function chkValidator()
@@ -72,6 +70,20 @@ class OfficeAccountController extends Controller{
                 'price' => 'numeric|max:10000000000',
                 'content' => 'max:120'
             ]);
+    }
+
+    private function setDate()
+    {
+        if(($req_date = Request::input('date')) && ($req_date != date('Y-m')))
+        {   
+            // $last_day = date('t',$req_date);
+            $last_day = date_create($req_date)->format('t');
+            $tmp_date = date_create($req_date.'-'.$last_day)->format('Y-m-d');
+        }else{
+            $tmp_date = date("Y-m-d h:i:s");
+        }
+
+        return $tmp_date;
     }
 
 

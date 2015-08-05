@@ -1,7 +1,8 @@
 @extends('layouts.office')
 
-@section('title', '세입자')
-
+@section('title')
+	세입자
+@stop
 
 @section('head')
 	@parent

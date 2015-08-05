@@ -51,6 +51,7 @@ class OfficeAccountHandler
      */
     public function start()
     {
+        $this->start = true;
         $this->setLedger();
         $this->arrangeLedger();
         $this->setMonth();
@@ -74,6 +75,18 @@ class OfficeAccountHandler
         }
 
         return $this->info;
+    }
+
+    public function insert($tel_id, $writer_user_id, $date, $action, $price, $content)
+    {
+        return M_TelAccount::create([
+            'tel_id'    => $tel_id
+            , 'writer_user_id' => $writer_user_id
+            , 'date'    => $date
+            , 'action'  => $action
+            , 'price'   => $price
+            , 'content' => $content
+        ]);
     }
 
     private function setLedger()
@@ -117,5 +130,9 @@ class OfficeAccountHandler
 
         $this->info['amount'] = $this->info['revenue'] - $this->info['expense'];
 
+        // var_dump($this->info);
+        // exit();
+
     }
+
 }

@@ -1,7 +1,7 @@
 @extends('layouts.home')
 
-@section('title', '고시원 등록')
-
+@section('title')
+	사용법
 @stop
 
 @section('head')

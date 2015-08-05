@@ -1,7 +1,7 @@
 @extends('layouts.welcome')
 
-@section('title', 'Login')
-
+@section('title')
+    회원가입
 @stop
 
 @section('css')
