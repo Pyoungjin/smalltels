@@ -21,6 +21,6 @@ class M_TelRTodo extends Model
      *
      * @var array
      */
-    protected $fillable = ['tel_id', 'title', 'type', 'interval', 'last_date'];
+    protected $fillable = ['tel_id', 'title', 'type', 'interval', 'standard_date'];
     
 }

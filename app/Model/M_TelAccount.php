@@ -21,6 +21,6 @@ class M_TelAccount extends Model
      *
      * @var array
      */
-    protected $fillable = ['tel_id', 'writer_user_id', 'action', 'price', 'content', 'date'];
+    protected $fillable = ['tel_id', 'user_id', 'action', 'price', 'content', 'date'];
     
 }

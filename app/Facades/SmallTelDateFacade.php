@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Illuminate\View\Factory
  */
-class TelAccountFacade extends Facade
+class SmallTelDateFacade extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -15,7 +15,7 @@ class TelAccountFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'TelAccountHandler';
+        return 'SmallTelDateHandler';
     }
 }
 

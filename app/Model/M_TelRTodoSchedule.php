@@ -4,7 +4,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class M_TelRTodoHistory extends Model
+class M_TelRTodoSchedule extends Model
 {
     // use Authenticatable, CanResetPassword;
     use SoftDeletes;
@@ -14,13 +14,13 @@ class M_TelRTodoHistory extends Model
      *
      * @var string
      */
-    protected $table = 'tel_rtodo_history';
+    protected $table = 'tel_rtodo_schedule';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['rtodo_id','tel_id', 'date', 'user_id','state'];
+    protected $fillable = ['rtodo_id', 'target_month', 'schedule'];
     
 }

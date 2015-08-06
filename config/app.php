@@ -196,9 +196,7 @@ return [
         'TelEvent'  => App\Facades\TelEventFacade::class,
         'TelsList'  => App\Facades\TelsListFacade::class,
         'TelMember' => App\Facades\TelMemberFacade::class,
-        'TelAccount'=> App\Facades\TelAccountFacade::class,
-        'TelRTodo'  => App\Facades\TelRTodoFacade::class,
-        'TelRTodoHistory'  => App\Facades\TelRTodoHistoryFacade::class,
+
 
         'User'      => App\Facades\UserHandlerFacade::class,
         'Office'    => App\Facades\OfficeHandlerFacade::class,
@@ -206,6 +204,8 @@ return [
         'OTodo'     => App\Facades\OfficeTodoFacade::class,
         'ORoom'     => App\Facades\OfficeRoomFacade::class,
         'OTenant'   => App\Facades\OfficeTenantFacade::class,
+
+        'STDate'    => App\Facades\SmallTelDateFacade::class,
 
     ],
 

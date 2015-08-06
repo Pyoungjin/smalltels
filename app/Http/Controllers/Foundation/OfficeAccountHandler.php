@@ -24,9 +24,6 @@ class OfficeAccountHandler
             'revenue' => 0,
             'expense' => 0,
             'amount' => 0,
-            'search_month' => null,
-            'pre_month' => null,
-            'next_month' => null,
         );
 
 
@@ -54,9 +51,6 @@ class OfficeAccountHandler
         $this->start = true;
         $this->setLedger();
         $this->arrangeLedger();
-        $this->setMonth();
-
-       
     }
 
     /**
@@ -77,44 +71,16 @@ class OfficeAccountHandler
         return $this->info;
     }
 
-    public function insert($tel_id, $writer_user_id, $date, $action, $price, $content)
-    {
-        return M_TelAccount::create([
-            'tel_id'    => $tel_id
-            , 'writer_user_id' => $writer_user_id
-            , 'date'    => $date
-            , 'action'  => $action
-            , 'price'   => $price
-            , 'content' => $content
-        ]);
-    }
-
     private function setLedger()
     {
         $this->info['search_month'] = (Request::input('date'))?Request::input('date'):date('Y-m');
  
         $this->info['ledger'] = M_TelAccount::where('tel_id','=',Request::route('tel_id'))
             ->where('date','like', $this->info['search_month']."%")
-            ->get(['id' ,'tel_id', 'writer_user_id', 'date', 'action', 'price', 'content'])
+            ->get(['id' ,'tel_id', 'user_id', 'date', 'action', 'price', 'content'])
             ->toArray();
     }
 
-    private function setMonth()
-    {
-        $this->info['pre_month'] = date_add(
-            date_create($this->info['search_month']),
-            date_interval_create_from_date_string('last month')
-            )->format('Y-m');
-
-        // var_dump($this->info['last_month']);
-        // exit();
-
-        $this->info['next_month'] = date_add(
-            date_create($this->info['search_month']),
-            date_interval_create_from_date_string('next month')
-            )->format('Y-m');
-
-    }
 
     private function arrangeLedger()
     {
@@ -129,10 +95,8 @@ class OfficeAccountHandler
         }
 
         $this->info['amount'] = $this->info['revenue'] - $this->info['expense'];
-
-        // var_dump($this->info);
-        // exit();
-
     }
+
+    
 
 }

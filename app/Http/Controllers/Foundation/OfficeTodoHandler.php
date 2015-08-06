@@ -4,44 +4,43 @@ namespace App\Http\controllers\Foundation;
 
 use User;
 use Request;
-// use TelsEvent;
-// use TelsList;
-// use TelStaffs;
+use STDate;
 
 use App\Model\M_TelRTodo;
+use App\Model\M_TelRTodoSchedule;
 use App\Model\M_TelRTodoHistory;
 
 use Office;
 
-use App\Http\Controllers\Foundation\OfficeTodoTrait_Register;
+// use App\Http\Controllers\Foundation\OfficeTodoTrait_Register;
 
 /**
  * 유저가 요청한 office todo의 정보를 가져온다.
  */
 class OfficeTodoHandler
 {
-    use OfficeTodoTrait_Register;
+    // use OfficeTodoTrait_Register;
 
     private $start = false;
+
+    private $tel_id = null;
     private $target_month = null;
-    private $rtodo_history_data = array();
-    private $rtodo_history_content = array();
+    private $current_month = null;
+    private $standard_date = null;
+    private $rtodo_list = [];
 
-    private $rtodo_data_arr = array();//tel_rtodo_history테이블에 데이터 입력시 필요
-    private $rtodo_history_new = array();//tel_rtodo_history테이블에 데이터 입력시 필요
-
-    private $info = array(
-        'id'        => null,
-        'year'      => null,
-        'month'     => null,
-        'content'    => array(),
-        'list_count'=> null,
-        );
+    private $info = [
+        'id'            => null,
+        'target_month'  => null,
+        'rtodo_list'    => [],
+        ];
 
    
 
     public function __construct()
     {
+        $this->tel_id = Office::info('id');
+        $this->current_month = date('Y-m');
 
     }
 
@@ -51,11 +50,13 @@ class OfficeTodoHandler
      */
     public function start()
     {
-        if($this->start){
-            return $this;
-        }
         $this->start = true;
-        $this->setRtodoHistory();
+
+        $this->setTargetMonth(Request::input('search_month'));
+        $this->setRTodoList($this->tel_id);
+
+        $this->setRTodoSchedule();
+        $this->arrangeInfo();
 
         return $this;
     }
@@ -78,267 +79,196 @@ class OfficeTodoHandler
         return $this->info;
     }
 
-    public function updateComplate()
+    private function arrangeInfo()
     {
-        // Request::input('history_id');
-        if(!$this->start)
-        {
-            $this->start();
+        $this->info['target_month'] = $this->target_month;
+        $this->info['rtodo_list'] = $this->rtodo_list;
+    }
+
+    private function setTargetMonth($target_month = null)
+    {
+        $this->target_month = ($target_month)?$target_month:date('Y-m');
+    }
+
+    private function setRTodoList($tel_id)
+    {
+        $rtodo_list_arr = M_TelRTodo::where('tel_id','=',$tel_id) -> get([
+            'id', 'title', 'type', 'interval', 'standard_date'
+            ]) -> toArray();
+
+        foreach ($rtodo_list_arr as $val) {
+            $this->rtodo_list[$val['id']] = $val;
         }
-        $rtodo_id = Request::input('rtodo_id');
+    }
 
-        $this->rtodo_history_content[$rtodo_id]['do'][date('Y-m-d')]['user_id'] = User::info('id');
-        $this->rtodo_history_content[$rtodo_id]['do'][date('Y-m-d')]['date'] = date('Y-m-d');
+    
 
-        return M_TelRTodoHistory::find($this->info['id'])->update([
-            'content' => json_encode($this->rtodo_history_content)
+    private function setRTodoSchedule()
+    {
+        if(!$this->target_month)
+        {
+            $this->setTargetMonth();
+        }
+        foreach ($this->rtodo_list as $val) {
+            $this->rtodo_list[$val['id']]['schedule'] = $this->setSchedule($val['id']);
+        }
+    }
+
+    private function setSchedule($rtodo_id)
+    {
+        if(!$schedule_json = M_TelRTodoSchedule::where('rtodo_id','=',$rtodo_id)
+            ->where('target_month','like',$this->target_month.'%')->get(['schedule'])->toArray())
+        {
+            if($this->target_month == $this->current_month)
+            {
+                $schedule_json = $this->newSchedule($rtodo_id, $this->target_month);
+            }else{
+                $schedule_json = "{}";
+            }
+        }else{
+            $schedule_json = $schedule_json[0]["schedule"];
+
+        }
+        // var_dump($schedule_json );
+        // exit();
+        return json_decode($schedule_json,true);
+    }
+
+    // private function 
+
+    private function newSchedule($rtodo_id, $target_month)
+    {
+        $this->standard_date = null;
+        $create_info_arr = $this->createSchedule($rtodo_id, $target_month)->toArray();
+        $new_rtodo = $this->updateRtodo($rtodo_id);
+
+        return $create_info_arr['schedule'];
+    }
+
+    private function createSchedule($rtodo_id, $target_month)
+    {
+
+        return M_TelRTodoSchedule::create([
+            'rtodo_id'      => $rtodo_id,
+            // 'target_month'  => "2015-08-01",
+            'target_month'  => $target_month.'-01',
+            'schedule'      => $this->initScheduleJson($rtodo_id),
             ]);
     }
 
-    /**
-     * 1. history에 해당 tel_id와 target_month에 조건이 충족하는 데이터가 있는지 확인한다.
-     * 2. 없다면 생성한다.
-     *     2-1 요청한 월이 현제인지 확인 후 상이하다면 데이터 없음을 반송한다.
-     *     2-2 상이하지 않다면 데이터를 생성한다.
-     * 3. 데이터를 불러온다.
-     * 4. 불러온 데이터를 가공한다.
-     */
-    private function setRtodoHistory()
+    private function initScheduleJson($rtodo_id)
     {
-        $this->setTargetDate();
-        $this->setRTodoHistoryData();
-        $this->setRTodoHistoryContent();
-        $this->setInfo();
-        $this->setListCount();
+        return json_encode($this->initScheduleArr($rtodo_id));
+    }
 
-        // var_dump($this->rtodo_history_content);
-        // var_dump($this->info);
+    private function initScheduleArr($rtodo_id)
+    {
+        if(!$this->rtodo_list)
+        {
+            $this->setRTodoList($this->tel_id);
+        }
+
+        $rtodo = $this->rtodo_list[$rtodo_id];
+        $standard_date = $rtodo['standard_date'];
+        $interval  = $rtodo['interval'];
+        $type      = $rtodo['type'];
+
+        if($type == 'period')
+        {
+            return $this->initPeriodScheduleArr($standard_date, $interval);
+        }elseif($type == 'weekly'){
+            return $this->initWeeklyScheduleArr($interval);
+        }elseif($type == 'monthly'){
+            return $this->initMonthlyScheduleArr($interval);
+        }
+    }
+
+    private function initPeriodScheduleArr($standard_date, $interval)
+    {
+        $result_arr = [];
+        $first_date = date_create($standard_date);
+
+        $t = date('t');
+
+        while($first_date->format('Y-m') != date('Y-m'))
+        {
+
+            $first_date = date_add( $first_date, date_interval_create_from_date_string($interval.' days'));
+            // var_dump($first_date->format('Y-m'));
+        }
         // exit();
-        
-    }
 
-    private function setTargetDate()
-    {
-        if(!Request::input('target_month'))
+        $target_date = (int)$first_date->format('d');
+
+        while($target_date < $t)
         {
-            Request::merge(['target_month' => date('Y-m')]);
+            array_push($result_arr, $target_date);
+            $target_date += $interval;
         }
 
-        $this->target_month = date_create(Request::input('target_month'))->format('Y-m');
+        $this->standard_date = date('Y-m-').end($result_arr);
+
+        return $result_arr;
     }
 
-    private function setRTodoHistoryData()
+    private function initWeeklyScheduleArr($interval)
     {
-        if(!count($history_data = $this->getRtodoHistory()))
-        {  
-            $target_month = date_create($this->target_month)->format('Y-m');
-            $current_month = date_create()->format('Y-m');
+        $result_arr = [];
 
-            if($target_month == $current_month)//요청한 달과 지금 현제이면..
+        $t = date('t');
+        $today = date('d');
+
+        $target_date = 0;
+
+        for ($i=1; $i < 8 ; $i++) { 
+            if(date_create(date('Y-m').'-'.$i)->format('w') == $interval)
             {
-                //데이터 생성
-                $history_data = $this->insertRTodoHistory();
-
+                $target_date = $i;
+                $i = 8;
             }
-            else//요청한 달이 현제가 아니면..
-            {
-                //데이터 없음 내보내기
-                var_dump('요청한 달에 데이터 없음');
-                exit();
-            }
-        }else{
-            $history_data = $history_data[0];
         }
 
-        $this->rtodo_history_data = $history_data;
-
-        // var_dump($this->rtodo_history_data);
-    }
-
-    private function getRtodoHistory()
-    {
-        return M_TelRTodoHistory::where('tel_id','=',Office::info('id'))
-            ->where('target_month','like',$this->target_month.'%')->get()->toArray();
-    }
-
-    /**
-     * 1. rtodo테이블에서 작성할 hitory와 관련된 데이터를 불러온다.
-     * 2. @ 각 목록 마다 계산한다.
-     *     2-1 type을 구분한다.
-     *         2-1-1 monthy일때: 
-     *             2-1-1-1 해당 날을 저장한다.
-     *             2-1-1-2 날짜가 벗어놨다면 직전 날짜를 rtodo::last_date에 업데이트한다. 
-     *         2-1-2 weekly일떄: 
-     *             2-1-2-1 last_date를 시작으로 7일씩 더해간다.
-     *             2-1-2-2 해당 날짜가 당월을 벗어났는지 확인한다.
-     *             2-1-2-3 
-     *                 2-1-2-3-1 해당날짜가 벗어나지 않았다면 날짜를 입력한다.
-     *                 2-1-2-3-2 날짜가 벗어놨다면 직전 날짜를 rtodo::last_date에 업데이트한다. 
-     *         2-1-3 daily일떄: 
-     *             2-1-3-1 last_date를 interval만큼 더해간다.
-     *             2-1-3-2 해당 날짜가 당월을 벗어났는지 확인한다.
-     *             2-1-3-3 
-     *                 2-1-3-3-1 해당날짜가 벗어나지 않았다면 날짜를 입력한다.
-     *                 2-1-3-3-2 날짜가 벗어놨다면 직전 날짜를 rtodo::last_date에 업데이트한다.
-     *      2-2 $rtodo_history_new에 각 결과를 push한다.
-     *  3. rtodo_history_new를 json으로 인코딩한다.
-     *  4. tel_rtodo_history테이블에 인설트한다.
-     */
-    private function insertRTodoHistory()
-    {
-        $this->setRTodoDataArr();
-        $this->makeRTodoHistoryNew();
-        // var_dump($this->rtodo_history_new);
-        // exit();
-        $this->updateRTodoLastDate();
-        ksort($this->rtodo_history_new);
-        return M_TelRTodoHistory::create([
-            'tel_id'    => Office::info('id'),
-            'target_month'  => date('Y-m-d'),
-            'content'   => json_encode($this->rtodo_history_new)//이거 고쳐야됨.
-        ])->toArray();   
-    }
-
-    private function setRTodoDataArr()
-    {
-        $this->rtodo_data_arr = M_TelRTodo::where('tel_id','=',Office::info('id'))
-            ->get()->toArray();
-
-        // var_dump($this->rtodo_data_arr);
-    }
-
-    private function makeRTodoHistoryNew()
-    {
-        foreach ($this->rtodo_data_arr as $val) {
-            $this->rtodo_history_new[$val['id']] = $this->setContent($val);
-        }
-
-
-    }
-
-    private function updateRTodoLastDate()
-    {   
-        foreach ($this->rtodo_history_new as $key => $val) {
-
-            M_TelRTodo::find($val['rtodo_id'])->update([
-                'last_date' => end($val['date'])
-                ]);
-        }
-        
-    }
-
-    private function setContent(array $data)
-    {
-        $date_arr = array();
-
-        if($data['type'] == 'monthly')
+        while($target_date < $t)
         {
-            $date_arr = $this->makeDateArrForMonth($data['last_date'],$data['interval']);
-        }
-        else if($data['type'] == 'weekly')
-        {
-            $date_arr = $this->makeDateArr($data['last_date'], 7);
-
-        }
-        else if($data['type'] == 'daily')
-        {
-            $date_arr = $this->makeDateArr($data['last_date'], $data['interval']);
+            if($target_date >= $today)
+            {
+               array_push($result_arr, $target_date);
+            }
+            $target_date += 7;
         }
 
-        return array(
-            'rtodo_id' => $data['id'],
-            'do' => array(),
-            'date' => $date_arr,
-            );
+        $this->standard_date = date('Y-m-').end($result_arr);
+
+        return $result_arr;
     }
 
-    private function makeDateArr($last_date, $interval){
-        $tmp_arr = array();
-        $interval = date_interval_create_from_date_string($interval." days");
+    private function initMonthlyScheduleArr($interval)
+    {
+        $t = date('t');
 
-        $current_month = date_create()->format('Y-m');
-        
-        $date = date_create($last_date);
+        $this->standard_date = date('Y-m-d');
 
-        $i = true;
-        while($i){
-            $date_month = $date->format('Y-m');
-             
-            if($current_month == $date_month)
-            {
-                array_push($tmp_arr,$date->format('Y-m-d'));
-                date_add($date,$interval);
-            }
-            else if($current_month > $date_month)
-            {
-                date_add($date,$interval);
-            }
-            else if($current_month < $date_month)
-            {
-                $i = false;
-            }
+        if($interval == 0)
+        {
+            return [(int)$t];
+        }elseif($interval > $t){
+            return [];
+        }elseif($interval <= $t){
+            return [(int)$interval];
+        }
+    }
 
-             
+    private function updateRtodo($rtodo_id)
+    {
+        if(!M_TelRTodo::find($rtodo_id)->update([
+            'standard_date' => $this->standard_date
+            ]))
+        {
+            $this->rtodo_list[$rtodo_id] = M_TelRTodo::find($rtodo_id)->toArray();
         }
 
         
-        return $tmp_arr;
-
     }
-
-    private function makeDateArrForMonth($last_date, $interval)
-    {
-        if($interval)
-        {
-            $tmp_arr = array(date('Y-m').'-'.$interval);
-        }
-        else
-        {    
-            $tmp_arr = array(date('Y-m').'-'.date('t'));
-        }
-        
-        return $tmp_arr;
-
-    }
-
-    private function setRTodoHistoryContent()
-    {
-        $this->rtodo_history_content = json_decode($this->rtodo_history_data['content'],true);
-    }
-
-    private function setInfo()
-    {
-        $this->info['id']       = $this->rtodo_history_data['id'];
-        $this->info['year']     = date_create($this->target_month)->format('Y');
-        $this->info['month']    = date_create($this->target_month)->format('m');
-        $this->info['content']  = $this->setInfoContent();
-    }
-
-    private function setInfoContent()
-    {
-        $tmp_arr = array();
-        if(is_array($this->rtodo_history_content))
-        {
-            $tmp_arr = $this->rtodo_history_content;
-        }
-
-        foreach ($tmp_arr as $key => $val) {
-            $tmp_arr[$key]['do_date'] = array();
-            foreach($val['do'] as $do_list){
-                array_push($tmp_arr[$key]['do_date'], $do_list['date']);
-            }
-        }
-
-        return $tmp_arr;
-    }
-
-    private function setListCount()
-    {
-        $this->info['list_info'] = count($this->rtodo_history_content);
-    }
-
-
-    
 
 
 }
