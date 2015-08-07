@@ -18,7 +18,7 @@ use Office;
 
 
 /**
- * 유저가 요청한 office room의 정보를 가져온다.
+ * 유저가 요청한 office room의 정보를 가져온다. 
  */
 class OfficeRoomHandler
 {

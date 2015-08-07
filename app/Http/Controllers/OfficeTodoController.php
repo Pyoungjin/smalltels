@@ -42,7 +42,8 @@ class OfficeTodoController extends Controller{
             );
         }
 
-        $standard_date = $this->standardDate(Request::input('target_m'), Request::input('target_d'));
+        // $standard_date = $this->standardDate(Request::input('target_m'), Request::input('target_d'));
+        $standard_date = date_create(Request::input('standard_date'));
 
         if(!M_TelRTodo::create([
             'tel_id' => Office::info('id'),
@@ -79,18 +80,18 @@ class OfficeTodoController extends Controller{
             ]);
     }
 
-    private function standardDate($standard_month, $standard_date)
-    {
-        $standard_year = date('Y');
-        $current_month = date('m');
+    // private function standardDate($standard_month, $standard_date)
+    // {
+    //     $standard_year = date('Y');
+    //     $current_month = date('m');
 
-        if($standard_month < $current_month)
-        {
-            $standard_year += 1;
-        }
+    //     if($standard_month < $current_month)
+    //     {
+    //         $standard_year += 1;
+    //     }
 
-        return date_create($standard_year.'-'.$standard_month.'-'.$standard_date);
-    }
+    //     return date_create($standard_year.'-'.$standard_month.'-'.$standard_date);
+    // }
 
 
 }

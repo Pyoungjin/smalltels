@@ -189,6 +189,7 @@ class OfficeTodoHandler
         $first_date = date_create($standard_date);
 
         $t = date('t');
+        $today = date('d');
 
         while($first_date->format('Y-m') != date('Y-m'))
         {
@@ -200,9 +201,12 @@ class OfficeTodoHandler
 
         $target_date = (int)$first_date->format('d');
 
-        while($target_date < $t)
+        while($target_date <= $t)
         {
-            array_push($result_arr, $target_date);
+            if($target_date >= $today)
+            {
+                array_push($result_arr, $target_date);
+            }
             $target_date += $interval;
         }
 
@@ -228,9 +232,9 @@ class OfficeTodoHandler
             }
         }
 
-        while($target_date < $t)
+        while($target_date <= $t)
         {
-            if($target_date >= $today)
+            if($target_date >= $today )
             {
                array_push($result_arr, $target_date);
             }

@@ -5,6 +5,9 @@
         <title>Smalltels - @yield('title')</title>
         <link rel="stylesheet" type="text/css" href="/css/css_reset.css">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+
         <style>
             body{
                 padding-top: 45px;
@@ -18,26 +21,7 @@
     @include('parts.top_head')
     <div class='container'>
     {{-- 홈/고시원 선택 --}}
-        <div class='row'>
-            <div class='span12'>
-                <ul class="nav nav-tabs">
-                    <li>
-                        <a href="/home">HOME</a>
-                    </li>
-                    @foreach ( (User::info('office_list')) as $val)
-                        @if($val['id'] == Office::info('id'))
-                            <li class='active'>
-                                <a href='/office/{{$val["id"]}}/board'>{{$val["name"]}}</a>
-                            </li>
-                        @else
-                            <li>
-                                <a href='/office/{{$val["id"]}}/board'>{{$val["name"]}}</a>
-                            </li>
-                        @endif
-                    @endforeach
-                    </ul>
-            </div>
-        </div>
+        @include('parts.top_navi')
     {{-- alert 표시 --}}
         @include('parts.alert_bar')
     {{-- 고시원 기능 --}}
@@ -70,13 +54,17 @@
             </div>
         </div>
 
+        @yield('function')
         @yield('content')
     
     </div>
     {{-- javascript --}}
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     @yield('javascript')
+
 
     </body>
 </html>  

@@ -18,20 +18,7 @@
     @include('parts.top_head')
     <div class='container'>
     {{-- 홈/고시원 선택 --}}
-        <div class='row'>
-            <div class='span12'>
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a href="/home">HOME</a>
-                    </li>
-                    @foreach ( (User::info('office_list')) as $val)
-                    <li>
-                        <a href='/office/{{$val["id"]}}/board'>{{$val["name"]}}</a>
-                    </li>
-                    @endforeach
-                    </ul>
-            </div>
-        </div>
+        @include('parts.top_navi')
     {{-- alert 표시 --}}
         @include('parts.alert_bar')
     </div>
@@ -51,6 +38,7 @@
                 <a class='btn' href="/home/admin">마이페이</a>
             </div>
         </div>
+        @yield('function')
         @yield('content')
         
     </div>
