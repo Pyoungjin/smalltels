@@ -11,6 +11,7 @@ use STDate;
 use OTodo;
 
 use App\Model\M_TelRTodo;
+use App\Model\M_TelRTodoPerform;
 
 use App\Http\Controllers\Controller;
 
@@ -28,6 +29,9 @@ class OfficeTodoController extends Controller{
 
     public function getIndex()
     {
+        
+
+        // return view('office.todo')->with('view_date',$view_date);
         return view('office.todo');
     }
 
@@ -61,17 +65,23 @@ class OfficeTodoController extends Controller{
             );
     }
 
-    // public function postComplate()
-    // {
-    //     if(!OTodo::updateComplate())
-    //     {
-    //         return redirect()->back()->with('message','failed : '.'complate update');
-    //     }
+    public function postPerform()
+    {
+        if(!M_TelRTodoPerform::create([
+            'rtodo_id'  => Request::input('rtodo_id'),
+            'date'      => Request::input('date'),
+            'user_id'   => User::info('id'),
+            'state'     => 'complete',
+            ]))
+        {
+            return redirect()->back()->with('message','입력중 오류 발생.');
+        }
 
-    //     return redirect()->back()->with(
-    //         'message','sucessed :'.'등록되었습니다.'
-    //         );
-    // }
+        return redirect()->back()->with(
+            'message',
+            Request::input('date')." : '".OTodo::info('rtodo_list')[Request::input('rtodo_id')]['title']."'를 완료하셨습니다."
+            );
+    }
 
     private function chkValidator()
     {
@@ -80,18 +90,11 @@ class OfficeTodoController extends Controller{
             ]);
     }
 
-    // private function standardDate($standard_month, $standard_date)
-    // {
-    //     $standard_year = date('Y');
-    //     $current_month = date('m');
+    private function setWeekDay()
+    {
+        $current_date = date('w');
 
-    //     if($standard_month < $current_month)
-    //     {
-    //         $standard_year += 1;
-    //     }
-
-    //     return date_create($standard_year.'-'.$standard_month.'-'.$standard_date);
-    // }
+    }
 
 
 }

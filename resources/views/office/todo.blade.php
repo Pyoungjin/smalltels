@@ -11,6 +11,13 @@
 @stop
 
 @section('function')
+	
+	{{-- @include('parts.month_component') --}}
+@stop
+
+@section('content')
+	@include('parts.date_component')
+	{{-- 기증 버튼 --}}
 	<div class='row'>
 		<div class='span12'>
 			{{-- 새로운 RTodo 만들기 --}}
@@ -77,15 +84,89 @@
 		</div>
 	</div>
 	
-	@include('parts.month_component')
-@stop
+	{{-- 할일 리스트 --}}
+	<div class='row'>
+		<div class='span12'>
 
-@section('content')
-	<div>
+			<table class='table'>
+				@foreach (OTodo::info('today_schedule') as $rtodo_id)
+					<tr>
+						<td>
+							{{($rtodo=OTodo::rtodo($rtodo_id))?$rtodo['title']:''}}
+						</td>
+						<td>
+							@if(!in_array(date('j'),$rtodo['perform']))
+							<button class='btn chk_perform' data-date='{{date('Y-m-').$i}}' data-rtodo_id={{$rtodo['id']}}><i class="icon-ok"></i></button>
+							@else
+							<i class="icon-ok-sign"></i> 완료
+							@endif
+						</td>
+					</tr>
+				@endforeach
+			</table>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='span12'>
+			@if(!count($list=OTodo::info('rtodo_list')))
+			데이터 없음
+			@else
+	 			@foreach ($list as $rtodo)
+				<table class='table'>
+					<tr >
+						<td style=" height:20px;" colspan="{{$t = OTodo::info('t')}}">{{$rtodo['title']}}</td>
+					</tr>
+					<tr>
+						@for($i=1; $i <= $t; $i++)
+							@if($i == date('j'))
+								{{-- <td class='text-center' style=" text-align: center; background-color:#e5e5e5;">  --}}
+								<td class='text-center' style=" text-align: center; background-color:#e5e5e5;"> 
+									{{$i}}<span style='font-size:8px'>(Today)</span>
+								</td>
+							@else
+								<td class='text-center' style='text-align: center; padding: 8px 7px; width:16px;' > 
+									{{$i}}
+								</td>
+							@endif
+						@endfor
+					</tr>
+					<tr data-rtodo_id='{{$rtodo["id"]}}' style="border-bottom: 3px solid #333;">
+						@for($i=1; $i <= $t; $i++)
+							@if(in_array($i, $rtodo['schedule']))
+								@if(in_array($i,$rtodo['perform']))
+									<td style="text-align: center;">
+									{{-- <td style="text-align: center; {{($i == date('j'))?'background-color:#e5e5e5;':''}}"> --}}
+										<i class="icon-ok-sign"></i>
+									</td>
+								@else
+									@if($i == date('j'))
+									<td style="text-align: center;">
+									{{-- <td style="text-align: center; background-color:#e5e5e5;"> --}}
+										<button class='btn chk_perform' data-date='{{date('Y-m-').$i}}' data-rtodo_id={{$rtodo['id']}}><i class="icon-ok"></i></button>
+									</td>
+									@else
+									<td style="text-align: center; ">
+										<i class="icon-minus"></i>
+									</td>
+									@endif
+								@endif
 							
-		<h1>Todo List</h1>
-		{{var_dump(OTodo::info())}}
-		
+							@else
+							{{-- <td style=" text-align: center; {{($i == date('j'))?'background-color:#e5e5e5;':''}}"></td> --}}
+							<td style=" text-align: center;"></td>
+							@endif
+						@endfor
+					</tr>
+				</table>
+				
+				@endforeach
+			<form id='frm_perform' action='/{{Request::path()}}/perform' method='post' style='margin:0px;'>
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				<input type="hidden" name="rtodo_id" id='frm_perform_rtodo_id' value="">
+				<input type="hidden" name="date" id='frm_perform_date' value="">
+			</form>
+ 			@endif
+		</tr>
 	</div>
 @stop
 
@@ -136,6 +217,16 @@ $('#create_interval').change(function(){
 				);
 		}
 	}
+});
+
+$('.chk_perform').click(function(){
+	$('#frm_perform_rtodo_id').val(
+		$(this).data('rtodo_id')
+		);
+	$('#frm_perform_date').val(
+		$(this).data('date')
+		);
+	$('#frm_perform').submit();
 });
 
 function strPeriod(){

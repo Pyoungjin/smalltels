@@ -8,7 +8,7 @@ use STDate;
 
 use App\Model\M_TelRTodo;
 use App\Model\M_TelRTodoSchedule;
-use App\Model\M_TelRTodoHistory;
+use App\Model\M_TelRTodoPerform;
 
 use Office;
 
@@ -27,12 +27,27 @@ class OfficeTodoHandler
     private $target_month = null;
     private $current_month = null;
     private $standard_date = null;
+    /**
+     * $rtodo_list
+     * $rtodo_list :[
+     *     @'rtodoid' : [
+     *              'id': $id, 'tel_id' : $tel_id, 'title' : $title, 'type' : $type, 'interval' : $interval,
+     *              'schedule' : [@(date_type:'d')$date],
+     *              'perform'  : [@perform_id: (date_type:'d')$perform_date],
+     *              'perform_list : @['id' : $id, 'rtodo_id': $rtodo_id,
+     *                              'date' :$perform_date ,'state':$state,'user_id':$user_id]
+     *     ]
+     * ]
+     */
     private $rtodo_list = [];
+    private $perform_list = [];
 
     private $info = [
         'id'            => null,
         'target_month'  => null,
+        't'             => null,
         'rtodo_list'    => [],
+        'today_schedule'=> [],
         ];
 
    
@@ -53,9 +68,12 @@ class OfficeTodoHandler
         $this->start = true;
 
         $this->setTargetMonth(Request::input('search_month'));
+        $this->setTargetMonthT($this->info['target_month']);
         $this->setRTodoList($this->tel_id);
 
         $this->setRTodoSchedule();
+        $this->setRTodoPerform();
+
         $this->arrangeInfo();
 
         return $this;
@@ -79,15 +97,31 @@ class OfficeTodoHandler
         return $this->info;
     }
 
+    public function rtodo($rtodo_id)
+    {   
+        if(!$this->start)
+        {
+            $this->start();
+        }
+
+        return $this->info['rtodo_list'][$rtodo_id];
+    }
+
     private function arrangeInfo()
     {
-        $this->info['target_month'] = $this->target_month;
-        $this->info['rtodo_list'] = $this->rtodo_list;
+        $this->info['target_month']     = $this->target_month;
+        $this->info['rtodo_list']       = $this->rtodo_list;
+        $this->info['today_schedule']   = $this->todaySchedule();
     }
 
     private function setTargetMonth($target_month = null)
     {
         $this->target_month = ($target_month)?$target_month:date('Y-m');
+    }
+
+    private function setTargetMonthT($target_month)
+    {
+        $this->info['t'] = date_create($target_month)->format('t');
     }
 
     private function setRTodoList($tel_id)
@@ -100,8 +134,6 @@ class OfficeTodoHandler
             $this->rtodo_list[$val['id']] = $val;
         }
     }
-
-    
 
     private function setRTodoSchedule()
     {
@@ -270,9 +302,49 @@ class OfficeTodoHandler
         {
             $this->rtodo_list[$rtodo_id] = M_TelRTodo::find($rtodo_id)->toArray();
         }
-
-        
     }
 
+    private function todaySchedule()
+    {
+        $tmp_arr=[];
+        $today = date('j');
+        foreach ($this->rtodo_list as $val) {
+            if(in_array($today, $val['schedule']))
+            {
+                array_push($tmp_arr,$val['id']);
+            }
+        }
+
+        return $tmp_arr;
+    }
+
+    private function setRTodoPerform()
+    {
+        $this->setPerformList();
+        // $this->setPerform();
+    }
+
+    private function setPerformList()
+    {
+         foreach ($this->rtodo_list as $val) {
+            $this->rtodo_list[$val['id']]['perform_list'] = $this->setPerformInfo($val['id']);
+            $this->setPerform($this->rtodo_list[$val['id']]);
+         }
+    }
+
+    private function setPerformInfo($rtodo_id)
+    {
+        return M_TelRTodoPerform::where('rtodo_id','=',$rtodo_id)
+        ->where('date','like',$this->info['target_month'].'%')->get(['id','rtodo_id','date','state','user_id'])->toArray();
+    }
+
+    private function setPerform(&$rtodo)
+    {
+        $rtodo['perform'] = array_column($rtodo['perform_list'],'date','id');
+        array_walk($rtodo['perform'], function(&$item)
+        {
+            $item = date_create($item)->format('d');
+        });
+    }
 
 }
