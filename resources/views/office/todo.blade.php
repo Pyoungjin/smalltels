@@ -30,7 +30,7 @@
 		<div class='span10 offset1'>
 			<div class='row'>
 				<div class='span2'>
-					<h4>정기 업무</h4>
+					<h4>고정 업무</h4>
 					
 				</div>
 				<div class='span7'>

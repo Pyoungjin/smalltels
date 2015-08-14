@@ -11,7 +11,11 @@
         <style>
             body{
                 padding-top: 45px;
+                /*background-color: #ddd;*/
             }
+            /*.container{
+                background-color: #fff;
+            }*/
         
         </style>
         @yield('css')
@@ -56,8 +60,10 @@
 
         @yield('function')
         @yield('content')
+
     
     </div>
+    @yield('modal')
     {{-- javascript --}}
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/js/bootstrap.min.js"></script>

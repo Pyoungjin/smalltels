@@ -8,6 +8,7 @@ use App\Http\Controllers\Foundation\TelMemberHandler;
 use App\Http\Controllers\Foundation\TelEventHandler;
 
 use App\Http\Controllers\Foundation\SmallTelDateHandler;
+use App\Http\Controllers\Foundation\UISupporter;
 
 use App\Http\Controllers\Foundation\UserHandler;
 use App\Http\Controllers\Foundation\OfficeHandler;

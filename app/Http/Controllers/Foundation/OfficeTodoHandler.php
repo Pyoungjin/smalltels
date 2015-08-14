@@ -126,13 +126,13 @@ class OfficeTodoHandler
 
     private function setRTodoList($tel_id)
     {
-        $rtodo_list_arr = M_TelRTodo::where('tel_id','=',$tel_id) -> get([
+        $this->rtodo_list= M_TelRTodo::where('tel_id','=',$tel_id) -> get([
             'id', 'title', 'type', 'interval', 'standard_date'
-            ]) -> toArray();
+            ])->keyBy('id') -> toArray();
 
-        foreach ($rtodo_list_arr as $val) {
-            $this->rtodo_list[$val['id']] = $val;
-        }
+        // foreach ($rtodo_list_arr as $val) {
+        //     $this->rtodo_list[$val['id']] = $val;
+        // }
     }
 
     private function setRTodoSchedule()
